@@ -1,6 +1,7 @@
+import re
 from datetime import date
 
-def validar_usuario(nome, data_nasc, senha, confirma_senha):
+def validar_usuario(nome, data_nasc, senha, confirma_senha, cpf):
     erros = []
     
     if len(nome) < 5:
@@ -8,6 +9,13 @@ def validar_usuario(nome, data_nasc, senha, confirma_senha):
     
     if senha != confirma_senha:
         erros.append("As senhas não coincidem.")
+        
+    if not re.match(r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$', senha):
+        erros.append("A senha deve ter no mínimo 8 caracteres, incluindo letras maiúsculas, minúsculas e números.")
+        
+    cpf_limpo = re.sub(r'[^0-9]', '', cpf)
+    if len(cpf_limpo) != 11:
+        erros.append("O CPF deve conter exatamente 11 números.")
         
     hoje = date.today()
     idade = hoje.year - data_nasc.year - ((hoje.month, hoje.day) < (data_nasc.month, data_nasc.day))

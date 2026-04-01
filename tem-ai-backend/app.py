@@ -1,10 +1,12 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import mysql.connector 
 from datetime import datetime
 from api_handler import buscar_endereco_por_cep
 from validacoes import validar_usuario
 
 app = Flask(__name__)
+CORS(app)
 
 # Conexão com o servidor MySQL
 def conectar():
@@ -26,11 +28,12 @@ def cadastrar_usuario():
         confirma_senha = data['confirma_senha']
         data_nasc_str = data['data_nascimento']
         cep = data['cep']
+        cpf = data['cpf']
 
         data_nasc = datetime.strptime(data_nasc_str, "%Y-%m-%d").date()
 
         # Validações de regra de negócio
-        erros = validar_usuario(nome, data_nasc, senha, confirma_senha)
+        erros = validar_usuario(nome, data_nasc, senha, confirma_senha, cpf)
         if erros:
             return jsonify({"erros": erros}), 400
 
@@ -44,12 +47,12 @@ def cadastrar_usuario():
 
         sql = """
         INSERT INTO Usuario 
-        (nome, email, senha, data_nascimento, cep, logradouro, cidade, estado) 
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        (nome, email, senha, data_nascimento, cpf, cep, logradouro, cidade, estado) 
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
 
         cursor.execute(sql, (
-            nome, email, senha, data_nasc_str, cep,
+            nome, email, senha, data_nasc_str, cpf, cep,
             endereco['logradouro'], endereco['cidade'], endereco['estado']
         ))
 
