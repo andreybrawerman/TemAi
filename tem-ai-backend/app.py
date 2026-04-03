@@ -13,8 +13,8 @@ CORS(app)
 def conectar():
     return mysql.connector.connect(
         host="localhost",
-        user="app_user",
-        password="1234",
+        user="root",
+        password="12345678",
         database="tem_ai"
     )
 
