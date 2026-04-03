@@ -12,8 +12,8 @@ CORS(app)
 def conectar():
     return mysql.connector.connect(
         host="localhost",
-        user="root",       
-        password="12345678", 
+        user="root",
+        password="12345678",
         database="tem_ai"
     )
 
@@ -77,6 +77,82 @@ def listar_usuarios():
     cursor.close()
     conn.close()
     return jsonify(lista)
+
+#Produtos
+@app.route('/produtos', methods=['POST'])
+def criar_produto():
+    data = request.json
+
+    nome = data['nome']
+    preco = data['preco']
+    estoque = data['estoque']
+
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = "INSERT INTO Produto (nome, preco, estoque_atual) VALUES (%s, %s, %s)"
+    cursor.execute(sql, (nome, preco, estoque))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return jsonify({"mensagem":"Produto criado com sucesso"})
+
+@app.route('/produtos', methods=['GET'])
+def listar_produtos():
+    conn = conectar()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM Produto")
+    produtos = cursor.fetchall()
+
+    lista = []
+    for p in produtos:
+        lista.append({
+            "id": p[0],
+            "nome": p[1],
+            "preco": float(p[2]),
+            "estoque": p[3]
+        })
+
+    cursor.close()
+    conn.close()
+
+    return jsonify(lista)
+
+@app.route('/produtos/<int:id>', methods=['PUT'])
+def atualizar_produto(id):
+    data = request.json
+
+    nome = data['nome']
+    preco = data['preco']
+    estoque = data['estoque']
+
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = "UPDATE Produto SET nome=%s, preco=%s, estoque_atual=%s WHERE ID_produto=%s"
+    cursor.execute(sql, (nome, preco, estoque, id))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return jsonify({"mensagem": "Produto atualizado"})
+
+@app.route('/produtos/<int:id>', methods=['DELETE'])
+def deletar_produto(id):
+    conn = conectar()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM Produto WHERE ID_produto=%s", (id,))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return jsonify({"mensagem": "Produto deletado"})
 
 if __name__ == '__main__':
     app.run(debug=True)
