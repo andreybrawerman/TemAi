@@ -4,6 +4,7 @@ import mysql.connector
 from datetime import datetime
 from api_handler import buscar_endereco_por_cep
 from validacoes import validar_usuario
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 CORS(app)
@@ -12,8 +13,8 @@ CORS(app)
 def conectar():
     return mysql.connector.connect(
         host="localhost",
-        user="root",
-        password="12345678",
+        user="app_user",
+        password="1234",
         database="tem_ai"
     )
 
@@ -36,6 +37,8 @@ def cadastrar_usuario():
         erros = validar_usuario(nome, data_nasc, senha, confirma_senha, cpf)
         if erros:
             return jsonify({"erros": erros}), 400
+        #HASH
+        senha_hash = generate_password_hash(senha)
 
         # API ViaCEP
         endereco = buscar_endereco_por_cep(cep)
@@ -52,7 +55,7 @@ def cadastrar_usuario():
         """
 
         cursor.execute(sql, (
-            nome, email, senha, data_nasc_str, cpf, cep,
+            nome, email, senha_hash, data_nasc_str, cpf, cep,
             endereco['logradouro'], endereco['cidade'], endereco['estado']
         ))
 
