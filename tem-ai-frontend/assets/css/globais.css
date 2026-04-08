@@ -1,0 +1,21 @@
+/* Importação de fontes globais */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+/* Paleta de Cores Oficial do Tem Aí */
+:root {
+    --laranja: rgb(209, 130, 51);
+    --laranja-escuro: rgb(183, 112, 42);
+    --verde-cabecalho: rgb(2, 67, 44);
+    --verde-letras-cabecalho: rgb(234, 255, 245);
+    --verde-letras-hover: rgb(131, 156, 144);
+    --verde-fundo: rgb(14, 90, 64);
+    --verde-escuro: rgb(2, 47, 31);
+}
+
+/* Reset Global para todos os navegadores */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
