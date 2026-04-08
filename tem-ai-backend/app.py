@@ -9,7 +9,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 CORS(app)
 
-# Conexão com o servidor MySQL
 def conectar():
     return mysql.connector.connect(
         host="localhost",
@@ -22,7 +21,6 @@ def conectar():
 def cadastrar_usuario():
     data = request.json
     try:
-        # Puxando dados do JSON (Front-end)
         nome = data['nome']
         email = data['email']
         senha = data['senha']
@@ -33,14 +31,11 @@ def cadastrar_usuario():
 
         data_nasc = datetime.strptime(data_nasc_str, "%Y-%m-%d").date()
 
-        # Validações de regra de negócio
         erros = validar_usuario(nome, data_nasc, senha, confirma_senha, cpf)
         if erros:
             return jsonify({"erros": erros}), 400
-        #HASH
         senha_hash = generate_password_hash(senha)
 
-        # API ViaCEP
         endereco = buscar_endereco_por_cep(cep)
         if not endereco:
             return jsonify({"erro": "CEP inválido"}), 400
@@ -81,7 +76,41 @@ def listar_usuarios():
     conn.close()
     return jsonify(lista)
 
-#Produtos
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    email = data.get('email')
+    senha_digitada = data.get('senha')
+
+    if not email or not senha_digitada:
+        return jsonify({"erro": "E-mail e senha são obrigatórios"}), 400
+
+    try:
+        conn = conectar()
+        cursor = conn.cursor(dictionary=True) # dictionary=True facilita pegar os dados
+        
+        sql = "SELECT ID_usuario, nome, senha FROM Usuario WHERE email = %s"
+        cursor.execute(sql, (email,))
+        usuario = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        if usuario:
+            if check_password_hash(usuario['senha'], senha_digitada):
+                return jsonify({
+                    "mensagem": "Login realizado com sucesso!",
+                    "id_usuario": usuario['ID_usuario'],
+                    "nome": usuario['nome']
+                }), 200
+            else:
+                return jsonify({"erro": "Senha incorreta"}), 401
+        else:
+            return jsonify({"erro": "Usuário não encontrado"}), 404
+
+    except Exception as e:
+        return jsonify({"erro": f"Erro no servidor: {str(e)}"}), 500
+
 @app.route('/produtos', methods=['POST'])
 def criar_produto():
     data = request.json
