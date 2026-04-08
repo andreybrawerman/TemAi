@@ -81,6 +81,43 @@ def listar_usuarios():
     conn.close()
     return jsonify(lista)
 
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    email = data.get('email')
+    senha_digitada = data.get('senha')
+
+    if not email or not senha_digitada:
+        return jsonify({"erro": "E-mail e senha são obrigatórios"}), 400
+
+    try:
+        conn = conectar()
+        cursor = conn.cursor(dictionary=True) # dictionary=True facilita pegar os dados
+        
+        # Busca o usuário pelo e-mail
+        sql = "SELECT ID_usuario, nome, senha FROM Usuario WHERE email = %s"
+        cursor.execute(sql, (email,))
+        usuario = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        if usuario:
+            # Verifica se a senha digitada bate com o hash do banco
+            if check_password_hash(usuario['senha'], senha_digitada):
+                return jsonify({
+                    "mensagem": "Login realizado com sucesso!",
+                    "id_usuario": usuario['ID_usuario'],
+                    "nome": usuario['nome']
+                }), 200
+            else:
+                return jsonify({"erro": "Senha incorreta"}), 401
+        else:
+            return jsonify({"erro": "Usuário não encontrado"}), 404
+
+    except Exception as e:
+        return jsonify({"erro": f"Erro no servidor: {str(e)}"}), 500
+
 #Produtos
 @app.route('/produtos', methods=['POST'])
 def criar_produto():
