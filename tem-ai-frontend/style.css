@@ -127,3 +127,27 @@ main section button:hover{
     margin: 4%;
     height: auto;
 }
+
+.sec3{
+    font-size: 20px;
+}
+
+.sec3 .card{
+    padding: 2%;
+    margin: 4%;
+    border-radius: 20px;
+    width: 40%;
+    transition: 0.5s;
+}
+
+.sec3 h1{
+    color: rgb(183, 112, 42);
+    font-size: 60px;
+    font-family: 'Bebas Neue', sans-serif;
+    text-align: center;
+}
+
+.sec3 p{
+    margin: 3%;
+    text-align: justify;
+}
