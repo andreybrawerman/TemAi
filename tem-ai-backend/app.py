@@ -13,7 +13,7 @@ def conectar():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="12345678",
+        password="K0p&rnic0",
         database="tem_ai"
     )
 
@@ -285,6 +285,6 @@ def atualizar_status_pedido(id_pedido):
         conn.close()
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)
 
 

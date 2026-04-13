@@ -49,7 +49,7 @@ document.getElementById('formCadastro').addEventListener('submit', async functio
     };
 
     try {
-        const response = await fetch('http://localhost:5000/usuarios', {
+        const response = await fetch('http://localhost:5001/usuarios', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
