@@ -1,12 +1,6 @@
-:root {
-    --laranja: rgb(209, 130, 51);
-    --laranja-escuro: rgb(183, 112, 42);
-    --verde-cabecalho: rgb(2, 67, 44);
-    --verde-letras-cabecalho: rgb(234, 255, 245);
-    --verde-letras-hover: rgb(131, 156, 144);
-    --verde-fundo: rgb(14, 90, 64);
-    --verde-escuro: rgb(2, 47, 31);
-}
+/* Importando a fonte Bebas Neue igual na Landing Page */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
 
 body { 
     font-family: Arial, sans-serif; 
@@ -15,36 +9,29 @@ body {
     padding: 0; 
 }
 
-.cabecalho-oficial {
-    background-color: var(--verde-cabecalho);
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-}
-
-.cabecalho-oficial h1 {
-    color: var(--verde-letras-cabecalho);
-    margin: 0;
-}
-
-.cabecalho-oficial h1:hover {
-    color: var(--verde-letras-hover);
-    cursor: default;
-}
-
 .container { 
     max-width: 1000px; 
-    margin: 30px auto; 
-    background: rgb(245, 245, 245);
-    padding: 30px; 
-    border-radius: 8px; 
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+    margin: 40px auto; 
+    background-color: var(--verde-escuro);
+    color: var(--verde-letras-cabecalho);
+    padding: 40px; 
+    border-radius: 15px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
 h2 { 
-    color: var(--verde-escuro); 
-    border-bottom: 2px solid var(--laranja);
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--laranja); 
+    font-size: 35px;
+    letter-spacing: 1px;
+    border-bottom: 2px solid rgba(209, 130, 51, 0.3); 
     padding-bottom: 5px;
+    margin-bottom: 25px;
+    margin-top: 20px;
+}
+
+h2:first-child {
+    margin-top: 0;
 }
 
 .form-group { 
@@ -55,67 +42,98 @@ h2 {
 }
 
 input { 
-    padding: 12px; 
-    border: 1px solid #ccc; 
-    border-radius: 4px; 
+    padding: 12px 15px; 
+    background-color: var(--verde-fundo);
+    color: var(--verde-letras-cabecalho);
+    border: 2px solid var(--verde-cabecalho); 
+    border-radius: 8px; 
     flex: 1; 
     min-width: 150px; 
-    outline-color: var(--verde-cabecalho);
+    font-size: 16px;
+    transition: all 0.3s ease;
+    outline: none;
 }
 
-button { 
-    padding: 12px 24px; 
-    border: none; 
-    border-radius: 4px; 
-    cursor: pointer; 
-    font-weight: bold; 
-    transition: background-color 0.3s;
+input::placeholder {
+    color: var(--verde-letras-hover);
 }
 
-.btn-principal {
-    background-color: var(--laranja);
-    color: white;
-}
-
-.btn-principal:hover {
-    background-color: var(--laranja-escuro);
-}
-
-.btn-cancelar { 
-    background-color: var(--verde-escuro); 
-    color: var(--verde-letras-cabecalho);
-    display: none; 
-}
-
-.btn-cancelar:hover { 
-    background-color: var(--verde-cabecalho); 
+input:focus {
+    border-color: var(--laranja);
+    box-shadow: 0 0 5px rgba(209, 130, 51, 0.3);
 }
 
 table { 
     width: 100%; 
-    border-collapse: collapse; 
+    border-collapse: separate; 
+    border-spacing: 0;
     margin-top: 10px; 
 }
 
 th, td { 
     padding: 15px; 
     text-align: left; 
-    border-bottom: 1px solid #ddd; 
+    border-bottom: 1px solid rgba(234, 255, 245, 0.1);
 }
 
 th { 
     background-color: var(--verde-cabecalho); 
     color: var(--verde-letras-cabecalho); 
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
 }
 
-tr:hover { 
-    background-color: #e9ecef; 
+th:first-child { border-top-left-radius: 8px; }
+th:last-child { border-top-right-radius: 8px; }
+
+tr:hover td { 
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Botões da Tabela */
+
+button { 
+    padding: 12px 25px; 
+    border: none; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    font-weight: bold; 
+    transition: all 0.3s ease;
+}
+
+.btn-principal {
+    background-color: var(--laranja);
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px; 
+    letter-spacing: 1px;
+}
+
+.btn-principal:hover {
+    background-color: var(--laranja-escuro);
+    transform: translateY(-2px);
+}
+
+.btn-cancelar { 
+    background-color: #6c757d;
+    color: white;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    display: none; 
+}
+
+.btn-cancelar:hover { 
+    background-color: #5a6268; 
+    transform: translateY(-2px);
 }
 
 .btn-editar { 
     background-color: var(--laranja); 
     color: white; 
-    padding: 8px 12px; 
+    padding: 8px 15px; 
+    border-radius: 6px;
 }
 
 .btn-editar:hover { 
@@ -123,11 +141,26 @@ tr:hover {
 }
 
 .btn-deletar { 
-    background-color: #dc3545;
+    background-color: #e63946;
     color: white;
-    padding: 8px 12px; 
+    padding: 8px 15px; 
+    border-radius: 6px;
+    margin-left: 5px;
 }
 
 .btn-deletar:hover { 
-    background-color: #c82333; 
+    background-color: #d62828; 
+}
+
+/* Remove as setinhas feias dos inputs de número no Chrome, Safari, Edge e Opera */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Remove as setinhas no Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
 }

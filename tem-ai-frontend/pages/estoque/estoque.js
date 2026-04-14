@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/produtos';
+const API_URL = 'http://localhost:5001/produtos';
 
 // 1. Função para carregar (Listar) os produtos na tabela (GET)
 async function carregarProdutos() {
