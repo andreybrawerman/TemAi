@@ -88,7 +88,8 @@ main section button:hover{
 }
 
 .sec2 .card:hover{
-    padding: 3%;
+    transform: scale(1.03);          
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
     transition: 0.5s;
 }
 
@@ -97,6 +98,13 @@ main section button:hover{
     width: 30%;
     margin: 4%;
     height: auto;
+    transition: 0.5s;
+}
+
+.sec2 img:hover{
+    transform: scale(1.03);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    transition: 0.5s;
 }
 
 .sec3{
@@ -117,8 +125,10 @@ main section button:hover{
 }
 
 .sec3 .card:hover, .card2:hover{
-    padding: 3%;
+    transform: scale(1.03);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
     transition: 0.5s;
+
 }
 .sec3 h1{
     color: rgb(183, 112, 42);
@@ -133,10 +143,19 @@ main section button:hover{
 }
 
 .sec3 .card img, .card2 img{
-    width: 100%;
-    height: 80%;
+    margin: 5%;
+    width: 90%;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 20px;
+}
+
+footer{
+    background-color: rgb(209, 130, 51);
+    color: rgb(2, 47, 31);
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    padding: 2%;    
 }
