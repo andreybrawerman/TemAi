@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - TemAí?</title>
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Login</h2>
+    <form id="formLogin">
+        
+        <div class="form-group">
+            <label for="email_login">E-mail</label>
+            <input type="email" id="email_login" name="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="senha_login">Senha</label>
+            <input type="password" id="senha_login" name="senha" required>
+        </div>
+
+        <button type="submit">Entrar</button>
+        
+        <div id="mensagemBox" class="mensagem"></div>
+
+        <div class="link-footer">
+            Não tem conta? <a href="cadastro.html">Cadastre-se aqui</a>
+        </div>
+    </form>
+</div>
+
+<script src="login.js"></script>
+</body>
+</html>
