@@ -26,6 +26,16 @@ main .sec1 h1, .sec2 h1 {
     margin: 0 0 20px 0;
 }
 
+.sec1 h1{
+    transform: translateX(100vw);
+    transition: transform 1.5s ease;
+}
+
+.sec1 h1.animar{
+    transform: translateX(0);
+    opacity: 1;
+}
+
 main .sec1 button{
     background-color: rgba(0, 0, 0, 0);
     color: rgb(209, 130, 51);
@@ -53,6 +63,15 @@ main section button:hover{
 #dif{
     color: rgb(234, 255, 245);
     font-family: 'Bebas Neue', sans-serif;
+    display: inline-block;
+    transform: translateX(-100vw);
+    opacity: 0;
+    transition: transform 1.5s ease;
+}
+
+#dif.animar{
+    transform: translateX(0);
+    opacity: 1;
 }
 
 #dif2{
