@@ -1,5 +1,18 @@
 const API_URL = "http://localhost:5001/usuarios";
 
+function toggleSenha(inputId, iconId) {
+    const passwordInput = document.getElementById(inputId);
+    const eyeIconImage = document.getElementById(iconId);
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        eyeIconImage.src = "../../assets/img/olho_fechado.png";
+    } else {
+        passwordInput.type = "password";
+        eyeIconImage.src = "../../assets/img/olho.png";
+    }
+}
+
 // Listar Usuários
 document.getElementById('btnListar').addEventListener('click', async () => {
     try {
