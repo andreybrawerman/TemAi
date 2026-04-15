@@ -31,7 +31,7 @@ def cadastrar_usuario():
 
         data_nasc = datetime.strptime(data_nasc_str, "%Y-%m-%d").date()
 
-        erros = validar_usuario(nome, data_nasc, senha, confirma_senha, cpf)
+        erros = validar_usuario(nome, data_nasc, senha, confirma_senha, cpf, email)
         if erros:
             return jsonify({"erros": erros}), 400
         senha_hash = generate_password_hash(senha)
@@ -67,14 +67,87 @@ def cadastrar_usuario():
 def listar_usuarios():
     conn = conectar()
     cursor = conn.cursor()
-    cursor.execute("SELECT nome, email FROM Usuario")
+    cursor.execute("SELECT ID_usuario, nome, email FROM Usuario")
     usuarios = cursor.fetchall()
-    
-    lista = [{"nome": u[0], "email": u[1]} for u in usuarios]
+
+    lista = [{"id": u[0], "nome": u[1], "email": u[2]} for u in usuarios]
     
     cursor.close()
     conn.close()
     return jsonify(lista)
+
+@app.route('/usuarios/<int:id>', methods=['GET'])
+def buscar_usuario(id):
+    conn = conectar()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("SELECT ID_usuario, nome, email, cpf, cep FROM Usuario WHERE ID_usuario = %s", (id,))
+    usuario = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    if usuario:
+        return jsonify(usuario)
+    else:
+        return jsonify({"erro": "Usuário não encontrado"}), 404
+    
+@app.route('/usuarios/<int:id>', methods=['PUT'])
+def atualizar_usuario(id):
+    data = request.json
+
+    nome = data['nome']
+    email = data['email']
+    cpf = data['cpf']
+    cep = data['cep']
+
+    # 🔥 ADICIONA ISSO AQUI
+    from datetime import datetime
+    data_nasc = datetime.strptime(data['data_nascimento'], "%Y-%m-%d").date()
+    senha = data.get('senha', "Teste123")  # pode adaptar depois
+    confirma_senha = data.get('confirma_senha', "Teste123")
+
+    erros = validar_usuario(nome, data_nasc, senha, confirma_senha, cpf, email)
+    if erros:
+        return jsonify({"erros": erros}), 400
+
+    conn = conectar()
+    cursor = conn.cursor()
+
+    sql = """
+    UPDATE Usuario 
+    SET nome=%s, email=%s, cpf=%s, cep=%s
+    WHERE ID_usuario=%s
+    """
+
+    cursor.execute(sql, (nome, email, cpf, cep, id))
+    conn.commit()
+
+    if cursor.rowcount == 0:
+        return jsonify({"erro": "Usuário não encontrado"}), 404
+
+    cursor.close()
+    conn.close()
+
+    return jsonify({"mensagem": "Usuário atualizado com sucesso!"})
+
+@app.route('/usuarios/<int:id>', methods=['DELETE'])
+def deletar_usuario(id):
+    conn = conectar()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM Usuario WHERE ID_usuario = %s", (id,))
+    conn.commit()
+
+    if cursor.rowcount == 0:
+        cursor.close()
+        conn.close()
+        return jsonify({"erro": "Usuário não encontrado"}), 404
+
+    cursor.close()
+    conn.close()
+
+    return jsonify({"mensagem": "Usuário deletado com sucesso!"})
 
 @app.route('/login', methods=['POST'])
 def login():

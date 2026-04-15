@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Teste API Usuários</title>
+<style>
+body{font-family:Arial; max-width:900px; margin:auto}
+input{margin:4px}
+button{margin:4px}
+pre{background:#f4f4f4; padding:10px}
+</style>
+</head>
+<body>
+
+<h1>API Usuários (Teste)</h1>
+
+<h2>Listar Usuários</h2>
+<button onclick="listarUsuarios()">Listar</button>
+<ul id="lista"></ul>
+
+<hr>
+
+<h2>Buscar Usuário por ID</h2>
+<input id="buscar_id" placeholder="ID">
+<button onclick="buscarUsuario()">Buscar</button>
+<pre id="buscar_result"></pre>
+
+<hr>
+
+<h2>Atualizar Usuário</h2>
+<input id="up_id" placeholder="ID">
+<input id="up_nome" placeholder="Nome">
+<input id="up_email" placeholder="Email">
+<input id="up_cpf" placeholder="CPF">
+<input id="up_cep" placeholder="CEP">
+<input id="up_data" type="date">
+<input id="up_senha" placeholder="Senha">
+<input id="up_confirma" placeholder="Confirmar senha">
+<button onclick="atualizarUsuario()">Atualizar</button>
+<pre id="update_result"></pre>
+
+
+<hr>
+
+<h2>Deletar Usuário</h2>
+<input id="del_id" placeholder="ID">
+<button onclick="deletarUsuario()">Deletar</button>
+<pre id="delete_result"></pre>
+
+<script>
+const API = "http://127.0.0.1:5001";
+
+function listarUsuarios(){
+    fetch(`${API}/usuarios`)
+    .then(r=>r.json())
+    .then(data=>{
+        console.log(data);
+        const ul=document.getElementById("lista");
+        ul.innerHTML="";
+        data.forEach(u=>{
+            const li=document.createElement("li");
+            li.innerText=`ID:${u.id} - ${u.nome} - ${u.email}`;
+            ul.appendChild(li);
+        });
+    })
+    .catch(e=>console.error(e));
+}
+
+function buscarUsuario(){
+    const id=document.getElementById("buscar_id").value;
+    fetch(`${API}/usuarios/${id}`)
+    .then(r=>r.json())
+    .then(data=>{
+        document.getElementById("buscar_result").innerText=JSON.stringify(data,null,2);
+    });
+}
+
+function atualizarUsuario(){
+    const id=document.getElementById("up_id").value;
+
+    fetch(`${API}/usuarios/${id}`,{
+        method:"PUT",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+            nome:document.getElementById("up_nome").value,
+            email:document.getElementById("up_email").value,
+            cpf:document.getElementById("up_cpf").value,
+            cep:document.getElementById("up_cep").value,
+            data_nascimento:document.getElementById("up_data").value,
+            senha:document.getElementById("up_senha").value,
+            confirma_senha:document.getElementById("up_confirma").value
+        })
+    })
+    .then(r=>r.json())
+    .then(data=>{
+        document.getElementById("update_result").innerText=JSON.stringify(data,null,2);
+    })
+    .catch(e=>console.error(e));
+}
+
+function deletarUsuario(){
+    const id=document.getElementById("del_id").value;
+
+    fetch(`${API}/usuarios/${id}`,{
+        method:"DELETE"
+    })
+    .then(r=>r.json())
+    .then(data=>{
+        document.getElementById("delete_result").innerText=JSON.stringify(data,null,2);
+    });
+}
+
+</script>
+
+</body>
+</html>

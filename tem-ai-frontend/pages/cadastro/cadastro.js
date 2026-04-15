@@ -48,6 +48,13 @@ document.getElementById('formCadastro').addEventListener('submit', async functio
         confirma_senha: document.getElementById('confirma_senha').value
     };
 
+    
+    if (!TestaCPF(data.cpf)) {
+        msgBox.innerHTML = "CPF inválido.";
+        msgBox.className = "mensagem erro";
+        return;
+    }
+
     try {
         const response = await fetch('http://localhost:5001/usuarios', {
             method: 'POST',
