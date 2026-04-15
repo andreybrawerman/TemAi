@@ -33,6 +33,8 @@ document.getElementById('btnBuscar').addEventListener('click', async () => {
 });
 
 // Atualizar Usuário
+// NO usuario.js, SUBSTITUA TODO O BLOCO DO EVENTO 'btnAtualizar' POR ESTE:
+
 document.getElementById('btnAtualizar').addEventListener('click', async () => {
     const id = document.getElementById('up_id').value;
     const dados = {
@@ -41,7 +43,8 @@ document.getElementById('btnAtualizar').addEventListener('click', async () => {
         cpf: document.getElementById('up_cpf').value,
         cep: document.getElementById('up_cep').value,
         data_nascimento: document.getElementById('up_data').value,
-        senha: document.getElementById('up_senha').value
+        senha: document.getElementById('up_senha').value,
+        confirma_senha: document.getElementById('up_confirma_senha').value
     };
 
     try {
@@ -50,12 +53,24 @@ document.getElementById('btnAtualizar').addEventListener('click', async () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(dados)
         });
+
+        const resultado = await response.json();
+
         if (response.ok) {
-            document.getElementById('update_msg').innerText = "✅ Atualizado com sucesso!";
+            document.getElementById('update_msg').innerText = resultado.mensagem || "✅ Atualizado com sucesso!";
             document.getElementById('update_msg').style.color = "#2ecc71";
+        } else {
+            let msgErro = resultado.erro || "";
+            if (resultado.erros) {
+                msgErro = resultado.erros.join(" | ");
+            }
+            document.getElementById('update_msg').innerText = msgErro || "Erro ao atualizar usuário.";
+            document.getElementById('update_msg').style.color = "#ff4d4d";
         }
     } catch (error) {
         console.error("Erro ao atualizar:", error);
+        document.getElementById('update_msg').innerText = "Erro ao conectar com o servidor.";
+        document.getElementById('update_msg').style.color = "#ff4d4d";
     }
 });
 
