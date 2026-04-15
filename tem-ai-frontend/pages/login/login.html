@@ -41,13 +41,18 @@
 
           <div class="form-group">
             <label for="senha_login">Senha</label>
-            <input
-              type="password"
-              id="senha_login"
-              name="senha"
-              required
-              placeholder="Sua senha"
-            />
+            <div class="input-container"> 
+                <input
+                    type="password"
+                    id="senha_login"
+                    name="senha"
+                    required
+                    placeholder="Sua senha"
+                />
+                <button type="button" class="password-toggle" onclick="toggleSenha('senha_login', 'eyeIcon')">
+                    <img src="../../assets/img/olho.png" alt="Toggle Password Visibility" id="eyeIcon">
+                </button>
+            </div>
           </div>
 
           <button type="submit" class="btn-principal">Entrar</button>

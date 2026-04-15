@@ -1,3 +1,16 @@
+function toggleSenha(inputId, iconId) {
+    const passwordInput = document.getElementById(inputId);
+    const eyeIconImage = document.getElementById(iconId);
+
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        eyeIconImage.src = "../../assets/img/olho_fechado.png";
+    } else {
+        passwordInput.type = "password";
+        eyeIconImage.src = "../../assets/img/olho.png";
+    }
+}
+
 document.getElementById('formLogin').addEventListener('submit', async function(e) {
     e.preventDefault();
     
@@ -24,7 +37,7 @@ document.getElementById('formLogin').addEventListener('submit', async function(e
             localStorage.setItem('usuarioLogado', JSON.stringify(result));
 
             setTimeout(() => {
-                window.location.href = "../home/landingpage.html";
+                window.location.href = "../vendas/testar_vendas.html";
             }, 500);
 
         } else {
