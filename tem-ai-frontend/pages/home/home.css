@@ -12,7 +12,7 @@ body{
 
 main .sec1{
     text-align: center;
-    background-image: url("img/temai-verde.png");
+    background-image: url("../../assets/img/temai-verde.png");
     background-size: cover;
     background-position: center;
     padding: 120px 10%;
