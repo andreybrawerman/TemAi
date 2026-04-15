@@ -1,59 +1,72 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cadastro - TemAí?</title>
-    <link rel="stylesheet" href="cadastro.css">
-</head>
-<body>
+    <link rel="stylesheet" href="../../assets/css/globais.css" />
+    <link rel="stylesheet" href="cadastro.css" />
+  </head>
+  <body>
+    <header>
+      <a href="../home/landingpage.html" class="logo">
+        <img src="../../assets/img/logo_temai.png" alt="Logo Temai" />
+      </a>
+      <nav>
+        <a href="../home/landingpage.html">Página Inicial</a>
+        <a href="../home/catalogo.html">Catálogo de Produtos</a>
+        <a href="../estoque/estoque.html">Estoque (ADM)</a>
+        <a href="../usuario/usuario.html">Usuários (ADM)</a>
+        <a href="../login/login.html">Entrar</a>
+        <a href="../cadastro/cadastro.html">Cadastrar</a>
+    </nav>
+      </nav>
+    </header>
 
-<div class="container">
-    <h2>Cadastro</h2>
-    <form id="formCadastro">
-        
-        <div class="form-group">
-            <label for="nome" class="required">Nome Completo</label>
-            <input type="text" id="nome" name="nome" placeholder="Mínimo 5 caracteres" required minlength="5">
-        </div>
+    <main class="cadastro-page">
+      <div class="container">
+        <h2>Criar Conta</h2>
+        <form id="formCadastro">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="nome">Nome Completo</label>
+              <input type="text" id="nome" required minlength="5" />
+            </div>
+            <div class="form-group">
+              <label for="email">E-mail</label>
+              <input type="email" id="email" required />
+            </div>
+            <div class="form-group">
+              <label for="cpf">CPF</label>
+              <input type="text" id="cpf" maxlength="11" required />
+            </div>
+            <div class="form-group">
+              <label for="data_nascimento">Nascimento</label>
+              <input type="date" id="data_nascimento" required />
+            </div>
+            <div class="form-group">
+              <label for="cep">CEP</label>
+              <input type="text" id="cep" maxlength="8" required />
+            </div>
+            <div class="form-group">
+              <label for="senha">Senha</label>
+              <input type="password" id="senha" required />
+            </div>
+          </div>
 
-        <div class="form-group">
-            <label for="email" class="required">E-mail</label>
-            <input type="email" id="email" name="email" required>
-        </div>
+          <button type="submit" class="btn-principal">
+            Finalizar Cadastro
+          </button>
 
-        <div class="form-group">
-            <label for="cpf" class="required">CPF</label>
-            <input type="text" id="cpf" name="cpf" placeholder="Apenas números (11 dígitos)" required maxlength="11">
-        </div>
+          <div id="mensagemBox" class="mensagem"></div>
 
-        <div class="form-group">
-            <label for="data_nascimento" class="required">Data de Nascimento</label>
-            <input type="date" id="data_nascimento" name="data_nascimento" required>
-        </div>
+          <div class="link-footer">
+            Já tem conta? <a href="../login/login.html">Faça login</a>
+          </div>
+        </form>
+      </div>
+    </main>
 
-        <div class="form-group">
-            <label for="cep" class="required">CEP</label>
-            <input type="text" id="cep" name="cep" placeholder="Apenas números" required maxlength="8">
-        </div>
-
-        <div class="form-group">
-            <label for="senha" class="required">Senha</label>
-            <input type="password" id="senha" name="senha" required>
-            <button type="button" class="password-toggle" onclick="toggleSenha('senha')">👁️</button>
-        </div>
-
-        <div class="form-group">
-            <label for="confirma_senha" class="required">Confirmar Senha</label>
-            <input type="password" id="confirma_senha" name="confirma_senha" required>
-            <button type="button" class="password-toggle" onclick="toggleSenha('confirma_senha')">👁️</button>
-        </div>
-
-        <button type="submit">Cadastrar</button>
-        <div id="mensagemBox" class="mensagem"></div>
-    </form>
-</div>
-
-<script src="cadastro.js"></script>
-</body>
+    <script src="cadastro.js"></script>
+  </body>
 </html>
