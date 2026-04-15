@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TemAí? - Administração de Usuários</title>
+    <link rel="stylesheet" href="../../assets/css/globais.css" />
+    <link rel="stylesheet" href="usuario.css" />
+  </head>
+  <body>
+    <header>
+      <a href="../home/landingpage.html" class="logo">
+        <img src="../../assets/img/logo_temai.png" alt="Logo Temai" />
+      </a>
+      <nav>
+        <a href="../home/landingpage.html">Página Inicial</a>
+        <a href="../home/catalogo.html">Catálogo de Produtos</a>
+        <a href="../estoque/estoque.html">Estoque (ADM)</a>
+        <a href="usuario.html" class="ativo">Usuários (ADM)</a>
+        <a href="../login/login.html">Entrar</a>
+        <a href="../cadastro/cadastro.html">Cadastrar</a>
+    </nav>
+      </nav>
+    </header>
+
+    <main class="container">
+      <h1>Painel de Controle de Usuários</h1>
+
+      <div class="grid-admin">
+        <section class="card">
+          <h2>Listar Usuários</h2>
+          <br>
+          <p>Visualize todos os clientes cadastrados.</p>
+          <br>
+          <button class="btn-principal" id="btnListar">Listar Todos</button>
+          <ul id="lista" class="lista-estilizada"></ul>
+        </section>
+
+        <section class="card">
+          <h2>Buscar Usuário</h2>
+          <div class="form-group">
+            <input id="buscar_id" type="number" placeholder="Digite o ID" />
+            <button class="btn-principal" id="btnBuscar">Buscar</button>
+          </div>
+          <pre id="buscar_result" class="resultado-json"></pre>
+        </section>
+
+        <section class="card">
+          <h2>Atualizar Dados</h2>
+          <div class="form-grid">
+            <input id="up_id" placeholder="ID do Usuário" class="full-width" />
+            <input id="up_nome" placeholder="Nome Completo" />
+            <input id="up_email" placeholder="E-mail" />
+            <input id="up_cpf" placeholder="CPF" />
+            <input id="up_cep" placeholder="CEP" />
+            <input id="up_data" type="date" />
+            <input id="up_senha" type="password" placeholder="Nova Senha" />
+          </div>
+          <button class="btn-principal" id="btnAtualizar">
+            Salvar Alterações
+          </button>
+          <p id="update_msg" class="feedback"></p>
+        </section>
+
+        <section class="card card-perigo">
+          <h2>Excluir Conta</h2>
+          <div class="form-group">
+            <input id="del_id" placeholder="ID para Deletar" />
+            <button class="btn-deletar" id="btnDeletar">Deletar</button>
+          </div>
+          <p id="delete_msg" class="feedback"></p>
+        </section>
+      </div>
+    </main>
+
+    <script src="usuario.js"></script>
+  </body>
+</html>

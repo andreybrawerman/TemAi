@@ -34,7 +34,7 @@ document.getElementById('formProduto').addEventListener('submit', async function
     event.preventDefault(); 
 
     const id = document.getElementById('produtoId').value;
-    const nome = document.getElementById('nome').value;
+    const nome = document.getElementById('nome').value.trim().toUpperCase();
     const preco = parseFloat(document.getElementById('preco').value);
     const estoque = parseInt(document.getElementById('estoque').value);
 
@@ -50,12 +50,18 @@ document.getElementById('formProduto').addEventListener('submit', async function
             body: JSON.stringify(payload)
         });
 
+        const resultado = await resposta.json();
+
         if (resposta.ok) {
             alert(id ? "Produto atualizado!" : "Produto cadastrado com sucesso!");
             cancelarEdicao(); 
             carregarProdutos(); 
         } else {
-            alert("Erro ao salvar o produto.");
+            if (resultado.id_existente) {
+                alert(`Produto já existe! ID: ${resultado.id_existente}`);
+            } else {
+                alert(resultado.erro || "Erro ao salvar o produto.");
+            }
         }
     } catch (erro) {
         console.error("Erro ao salvar:", erro);

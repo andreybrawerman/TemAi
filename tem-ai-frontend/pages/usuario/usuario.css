@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+:root {
+    --verde-fundo: rgb(14, 90, 64);
+    --verde-card: rgb(2, 67, 44);
+    --laranja: rgb(209, 130, 51);
+    --laranja-hover: rgb(183, 112, 42);
+    --branco: #fffefe;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--verde-fundo);
+    margin: 0;
+    color: var(--branco);
+}
+
+.container {
+    padding: 40px 5%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 60px;
+    color: var(--laranja);
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.grid-admin {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 30px;
+}
+
+.card {
+    background-color: var(--verde-card);
+    padding: 30px;
+    border-radius: 20px;
+    transition: 0.4s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    color: var(--laranja);
+    font-size: 32px;
+    border-bottom: 1px solid rgba(209, 130, 51, 0.3);
+    padding-bottom: 10px;
+}
+
+.form-group, .form-grid {
+    display: flex;
+    gap: 10px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background: #f4f4f4;
+    color: #333;
+}
+
+.btn-principal {
+    background-color: var(--laranja);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-principal:hover { background-color: var(--laranja-hover); }
+
+.btn-deletar {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Bebas Neue', sans-serif;
+}
+
+.lista-estilizada {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.lista-estilizada li {
+    background: rgba(255,255,255,0.1);
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.resultado-json {
+    background: #222;
+    padding: 10px;
+    border-radius: 5px;
+    color: #00ff00;
+    font-size: 12px;
+}
+
+.feedback { margin-top: 10px; font-size: 14px; font-weight: bold; }
