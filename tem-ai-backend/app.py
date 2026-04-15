@@ -188,12 +188,24 @@ def login():
 def criar_produto():
     data = request.json
 
-    nome = data['nome']
+    nome = data['nome'].strip().upper()
     preco = data['preco']
     estoque = data['estoque']
 
     conn = conectar()
     cursor = conn.cursor()
+
+    cursor.execute("SELECT ID_produto FROM Produto WHERE nome = %s", (nome,))
+    produto_existente = cursor.fetchone()
+
+    if produto_existente:
+        id_existente = produto_existente[0]
+        cursor.close()
+        conn.close()
+        return jsonify({
+            "erro": "Produto já existe.",
+            "id_existente": id_existente
+        }), 400
 
     sql = "INSERT INTO Produto (nome, preco, estoque_atual) VALUES (%s, %s, %s)"
     cursor.execute(sql, (nome, preco, estoque))
@@ -236,6 +248,21 @@ def atualizar_produto(id):
 
     conn = conectar()
     cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT ID_produto FROM Produto WHERE nome = %s AND ID_produto <> %s",
+        (nome, id)
+    )
+    produto_existente = cursor.fetchone()
+
+    if produto_existente:
+        id_existente = produto_existente[0]
+        cursor.close()
+        conn.close()
+        return jsonify({
+            "erro": "Produto já existe.",
+            "id_existente": id_existente
+        }), 400
 
     sql = "UPDATE Produto SET nome=%s, preco=%s, estoque_atual=%s WHERE ID_produto=%s"
     cursor.execute(sql, (nome, preco, estoque, id))
