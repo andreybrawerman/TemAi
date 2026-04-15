@@ -5,9 +5,7 @@
 }
 
 body {
-    margin: 20px; 
     background-color: rgb(14, 90, 64);
-
 }
 
 h1 {
@@ -100,6 +98,17 @@ section {
     margin: 5%;
 }
 
+#total{
+    color: white;
+}
+
+.sacola-area li{
+    background-color: white;
+    padding: 3%;
+    border-radius: 5px;
+    list-style: none;
+}
+
 .btn-finalizar, .meus-pedidos button, .painel-adm button{ 
     background-color: rgb(183, 112, 42); 
     color: white; 
@@ -138,9 +147,23 @@ section {
     border-radius: 5px;
 }
 
+.meus-pedidos p{
+    background-color: white;
+    padding: 3%;
+    border-radius: 5px;   
+}
+
 .painel-adm{
     justify-content: center;
     width: 80%;
+    margin: 0 auto;
+    margin-bottom: 5%;
+    transition: 0.5s;
+}
+
+.painel-adm:hover{
+    transform: scale(1.03);
+    transition: 0.5s;
 }
 
 .painel-adm h2{
@@ -150,6 +173,10 @@ section {
 .painel-adm button{
     background-color: rgb(2, 67, 44);
     margin: 1%;
+}
+
+.painel-adm button:hover{
+    background-color: rgb(2, 47, 31);
 }
 
 table { 
@@ -166,4 +193,54 @@ th, td {
 
 th { 
     background-color: #f8f9fa; 
+}
+
+footer{
+    background-color: rgb(209, 130, 51);
+    color: rgb(2, 47, 31);
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    padding: 2%;    
+}
+
+/* CÓDIGOS PARA RESPONSIVIDADE */
+
+/* ================= TABLET ================= */
+@media (max-width: 768px){
+    h1{
+        font-size: 50px;
+    }
+    h2{
+        font-size: 35px;
+    }
+    .container{
+        flex-direction: column;
+        align-items: center;
+    }
+    .sacola-area, .meus-pedidos{
+        width: 90%;
+    }
+    .painel-adm{
+        width: 95%;
+    }
+}
+
+/* ================= CELULAR ================= */
+@media (max-width: 480px){
+    h1{
+        font-size: 40px;
+    }
+    h2{
+        font-size: 28px;
+    }
+    .produto-card{
+        width: 90%;
+    }
+    .produto-card button{
+        width: 100%;
+    }
+    table{
+        font-size: 14px;
+    }
 }

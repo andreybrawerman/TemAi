@@ -32,7 +32,7 @@
             <ul id="itens_sacola">
                 <li>Nenhum item adicionado.</li>
             </ul>
-            <p><strong>Total: R$ <span id="valor_total_sacola">0.00</span></strong></p>
+            <p id="total"><strong>TOTAL: R$ <span id="valor_total_sacola">0.00</span></strong></p>
             <button class="btn-finalizar" onclick="finalizarVenda()">FINALIZAR COMPRA</button>
         </section>
 
@@ -62,6 +62,10 @@
             <tbody id="tabela_adm"></tbody>
         </table>
     </section>
+
+    <footer>
+    Copyright © 2026 TemAí? Inc. Todos os direitos reservados.
+    </footer>
 
     <script>
         const API = "http://localhost:5001";

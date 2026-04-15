@@ -102,7 +102,7 @@ main section button:hover{
     padding: 2%;
     margin: 4%;
     border-radius: 20px;    
-    width: 40%;
+    width: 45%;
     transition: 0.5s;
 }
 
@@ -177,4 +177,50 @@ footer{
     font-size: large;
     font-weight: bold;
     padding: 2%;    
+}
+
+/* CÓDIGOS PARA RESPONSIVIDADE */
+
+/* ================= TABLET ================= */
+@media (max-width: 768px){
+    main .sec1 h1{
+        font-size: 60px;
+    }
+    .sec2{
+        flex-direction: column;
+        text-align: center;
+    }
+    .sec2 .card{
+        width: 90%;
+    }
+    .sec2 img{
+        width: 70%;
+    }
+    .sec3{
+        flex-direction: column;
+        align-items: center;
+    }
+    .sec3 .card,
+    .sec3 .card2{
+        width: 90%;
+    }
+}
+
+/* ================= CELULAR ================= */
+@media (max-width: 480px){
+    main .sec1{
+        padding: 80px 5%;
+    }
+    main .sec1 h1{
+        font-size: 40px;
+    }
+    main .sec1 button{
+        font-size: 20px;
+    }
+    .sec2 h1, .sec3 h1{
+        font-size: 35px;
+    }
+    .sec2 img{
+        width: 90%;
+    }
 }
