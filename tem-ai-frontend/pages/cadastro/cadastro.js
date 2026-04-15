@@ -73,6 +73,9 @@ document
         msgBox.innerHTML = result.mensagem;
         msgBox.className = "mensagem sucesso";
         document.getElementById("formCadastro").reset();
+        setTimeout(() => {
+                window.location.href = "../login/login.html";
+            }, 1000);
       } else {
         let msgErro = result.erro || "";
         if (result.erros) {

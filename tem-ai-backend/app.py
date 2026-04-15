@@ -160,7 +160,7 @@ def login():
 
     try:
         conn = conectar()
-        cursor = conn.cursor(dictionary=True) # dictionary=True facilita pegar os dados
+        cursor = conn.cursor(dictionary=True, buffered=True) # dictionary=True facilita pegar os dados
         
         sql = "SELECT ID_usuario, nome, senha FROM Usuario WHERE email = %s"
         cursor.execute(sql, (email,))
