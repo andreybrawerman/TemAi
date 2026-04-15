@@ -46,6 +46,29 @@ h2 {
   margin-bottom: 30px;
 }
 
+.input-container {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.password-toggle img {
+    width: 22px;
+    height: auto;
+}
+
 /* Em telas pequenas, o grid vira uma coluna só */
 @media (max-width: 600px) {
   .form-grid {

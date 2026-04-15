@@ -24,12 +24,16 @@ function TestaCPF(strCPF) {
   return true;
 }
 
-function toggleSenha(campoId) {
-  const campo = document.getElementById(campoId);
-  if (campo.type === "password") {
-    campo.type = "text";
+function toggleSenha(inputId, iconId) {
+  const passwordInput = document.getElementById(inputId);
+  const eyeIconImage = document.getElementById(iconId);
+
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    eyeIconImage.src = "../../assets/img/olho_fechado.png";
   } else {
-    campo.type = "password";
+    passwordInput.type = "password";
+    eyeIconImage.src = "../../assets/img/olho.png";
   }
 }
 
