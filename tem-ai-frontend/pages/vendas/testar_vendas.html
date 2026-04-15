@@ -3,53 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <title>Tem Ai - Marketplace</title>
-    <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; background-color: #f4f4f9; }
-        h1 { color: #333; }
-        section { background: white; border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        
-        /* Estilo da Vitrine */
-        #vitrine { display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 20px; }
-        .produto-card { border: 1px solid #eee; padding: 15px; border-radius: 8px; width: 200px; text-align: center; background: #fff; }
-        .produto-card button { background-color: #28a745; color: white; border: none; padding: 10px; cursor: pointer; border-radius: 5px; }
-        
-        /* Estilo da Sacola */
-        .sacola-area { border: 2px solid #ffaa00; background: #fffef0; }
-        .btn-finalizar { background-color: #ffaa00; color: white; font-weight: bold; padding: 15px; border: none; border-radius: 5px; cursor: pointer; width: 100%; }
-
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background-color: #f8f9fa; }
-    </style>
+    <link rel="stylesheet" href="vendas.css">
+    <link rel="stylesheet" href="../../assets/css/globais.css">
 </head>
 <body>
+    <header>
+        <a href="landingpage.html" class="logo">
+            <img src="../../assets/img/logo_temai.png" alt="Logo Temai">
+        </a>
 
-    <h1>🏪 Tem Ai - Área de Compras</h1>
+        <nav>
+            <a href="../home/landingpage.html">Página Inicial</a>
+            <a href="../home/catalogo.html" class="ativo">Catálogo de Produtos</a>
+            <a href="../estoque/estoque.html">Estoque (ADM)</a>
+        </nav>
+    </header>
+
+    <h1>Tem Aí? - Área de Compras</h1>
 
     <h2>Produtos Disponíveis</h2>
     <div id="vitrine">
         <p>Carregando produtos...</p>
     </div>
 
-    <section class="sacola-area">
-        <h2>🛒 Minha Sacola</h2>
-        <ul id="itens_sacola">
-            <li>Nenhum item adicionado.</li>
-        </ul>
-        <p><strong>Total: R$ <span id="valor_total_sacola">0.00</span></strong></p>
-        <button class="btn-finalizar" onclick="finalizarVenda()">FINALIZAR COMPRA</button>
-    </section>
+    <div class="container">
+        <section class="sacola-area">
+            <h2>🛒 Minha Sacola</h2>
+            <ul id="itens_sacola">
+                <li>Nenhum item adicionado.</li>
+            </ul>
+            <p><strong>Total: R$ <span id="valor_total_sacola">0.00</span></strong></p>
+            <button class="btn-finalizar" onclick="finalizarVenda()">FINALIZAR COMPRA</button>
+        </section>
 
-    <section>
-        <h2>👤 Meus Pedidos</h2>
-        <input type="number" id="busca_usuario_id" placeholder="ID do Usuário (Ex: 1)">
-        <button onclick="listarPedidosUsuario()">Ver Histórico</button>
-        <div id="lista_usuario"></div>
-    </section>
+        <section class="meus-pedidos">
+            <h2>Meus Pedidos</h2>
+            <input type="number" id="busca_usuario_id" placeholder="ID do Usuário (Ex: 1)"> <br>
+            <button onclick="listarPedidosUsuario()">VER HISTÓRICO</button> 
+            <div id="lista_usuario"></div>
+        </section>
+    </div>
 
-    <section>
+
+    <section class="painel-adm">
         <h2>🛠️ Painel ADM (Vendas Realizadas)</h2>
-        <button onclick="listarPedidosAdmin()">Atualizar Relatório Geral</button>
+        <button onclick="listarPedidosAdmin()">ATUALIZAR RELATÓRIO GERAL</button>
         <table>
             <thead>
                 <tr>
@@ -178,7 +176,7 @@
                     <td>${p.status}</td>
                     <td>
                         <button onclick="finalizarPedido(${p.id})">
-                            Finalizar
+                            FINALIZAR
                         </button>
                     </td>
                 </tr>
