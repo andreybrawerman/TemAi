@@ -52,3 +52,12 @@ nav a.ativo {
     color: var(--laranja); /* Usa aquele seu laranja rgb(209, 130, 51) */
     border-bottom: 2px solid var(--laranja); /* Opcional: um sublinhado charmoso */
 }
+
+footer{
+    background-color: rgb(209, 130, 51);
+    color: rgb(2, 47, 31);
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+    padding: 2%;    
+}

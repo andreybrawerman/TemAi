@@ -170,15 +170,6 @@ main section button:hover{
     border-radius: 20px;
 }
 
-footer{
-    background-color: rgb(209, 130, 51);
-    color: rgb(2, 47, 31);
-    text-align: center;
-    font-size: large;
-    font-weight: bold;
-    padding: 2%;    
-}
-
 /* CÓDIGOS PARA RESPONSIVIDADE */
 
 /* ================= TABLET ================= */
