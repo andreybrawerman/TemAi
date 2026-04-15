@@ -34,6 +34,7 @@ def cadastrar_usuario():
         erros = validar_usuario(nome, data_nasc, senha, confirma_senha, cpf, email)
         if erros:
             return jsonify({"erros": erros}), 400
+        
         senha_hash = generate_password_hash(senha)
 
         endereco = buscar_endereco_por_cep(cep)
@@ -101,7 +102,6 @@ def atualizar_usuario(id):
     cpf = data['cpf']
     cep = data['cep']
 
-    # 🔥 ADICIONA ISSO AQUI
     from datetime import datetime
     data_nasc = datetime.strptime(data['data_nascimento'], "%Y-%m-%d").date()
     senha = data.get('senha', "Teste123")  # pode adaptar depois
@@ -160,7 +160,7 @@ def login():
 
     try:
         conn = conectar()
-        cursor = conn.cursor(dictionary=True, buffered=True) # dictionary=True facilita pegar os dados
+        cursor = conn.cursor(dictionary=True, buffered=True) 
         
         sql = "SELECT ID_usuario, nome, senha FROM Usuario WHERE email = %s"
         cursor.execute(sql, (email,))
