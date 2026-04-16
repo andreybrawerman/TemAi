@@ -71,6 +71,36 @@ input {
     color: #333;
 }
 
+.input-container {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+}
+
+.input-container input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.password-toggle img {
+    width: 22px;
+    height: auto;
+}
+
 .btn-principal {
     background-color: var(--laranja);
     color: white;

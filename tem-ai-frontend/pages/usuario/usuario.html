@@ -55,8 +55,18 @@
             <input id="up_cpf" placeholder="CPF" />
             <input id="up_cep" placeholder="CEP" />
             <input id="up_data" type="date" />
-            <input id="up_senha" type="password" placeholder="Nova Senha" />
-            <input id="up_confirma_senha" type="password" placeholder="Confirmar Senha" />
+            <div class="input-container">
+              <input id="up_senha" type="password" placeholder="Nova Senha" />
+              <button type="button" class="password-toggle" onclick="toggleSenha('up_senha', 'eyeIcon1')">
+                  <img src="../../assets/img/olho.png" alt="Mostrar Senha" id="eyeIcon1">
+              </button>
+          </div>
+          <div class="input-container">
+              <input id="up_confirma_senha" type="password" placeholder="Confirmar Senha" />
+              <button type="button" class="password-toggle" onclick="toggleSenha('up_confirma_senha', 'eyeIcon2')">
+                  <img src="../../assets/img/olho.png" alt="Mostrar Senha" id="eyeIcon2">
+              </button>
+          </div>
           </div>
           <button class="btn-principal" id="btnAtualizar">
             Salvar Alterações
