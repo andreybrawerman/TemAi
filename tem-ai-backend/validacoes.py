@@ -39,11 +39,9 @@ def validar_cpf(cpf):
 
     return True
 
-
 def validar_email(email):
     padrao = r'^[\w\.-]+@[\w\.-]+\.\w+$'
     return re.match(padrao, email) is not None
-
 
 def validar_usuario(nome, data_nasc, senha, confirma_senha, cpf, email):
     erros = []
