@@ -1,246 +1,265 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
 
-*{
-    font-family: Arial, Helvetica, sans-serif;
+* {
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    background-color: rgb(14, 90, 64);
+  background-color: rgb(14, 90, 64);
 }
 
 h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    color: rgb(209, 130, 51);
-    font-size: 70px;
-    text-align: center;
-    margin: 3%;
+  font-family: "Bebas Neue", sans-serif;
+  color: rgb(209, 130, 51);
+  font-size: 70px;
+  text-align: center;
+  margin: 3%;
 }
 
 h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    color:  rgb(234, 255, 245);
-    font-size: 50px;
-    text-align: center;
+  font-family: "Bebas Neue", sans-serif;
+  color: rgb(234, 255, 245);
+  font-size: 50px;
+  text-align: center;
 }
 
 section {
-    background: white; 
-    padding: 20px; 
-    margin-bottom: 20px; 
-    border-radius: 10px; 
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+  background: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-#vitrine { 
-    display: flex; 
-    margin: 2%;
-    gap: 20px; 
-    flex-wrap: wrap; 
-    margin-bottom: 20px; 
-    align-items: center;
-    justify-content: center;
+#vitrine {
+  display: flex;
+  margin: 2%;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  align-items: center;
+  justify-content: center;
 }
 
-.produto-card { 
-    border: 1px solid #eee; 
-    padding: 15px; 
-    border-radius: 8px; 
-    width: 200px; 
-    text-align: center; 
-    background: #fff; 
-    transition: 0.5s;
+.produto-card {
+  border: 1px solid #eee;
+  padding: 15px;
+  border-radius: 8px;
+  width: 200px;
+  text-align: center;
+  background: #fff;
+  transition: 0.5s;
 }
 
-.produto-card p{
-    margin: 7%;
+.produto-card p {
+  margin: 7% 0;
 }
 
-.produto-card:hover{
-    transform: scale(1.09);          
-    transition: 0.5s;
+.produto-card:hover {
+  transform: scale(1.09);
+  transition: 0.5s;
 }
 
-.produto-card button { 
-    background-color: #28a745; 
-    color: white; 
-    border: none; 
-    padding: 10px; 
-    cursor: pointer; 
-    border-radius: 5px; 
-    transition: 0.5s;
+.produto-card button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.5s;
 }
 
-.produto-card button:hover{
-    background-color: #23853a;
-    transition: 0.5s;
+.produto-card button:hover {
+  background-color: #23853a;
+  transition: 0.5s;
 }
 
-.container{
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
 }
 
-.sacola-area { 
-    background-color: rgb(209, 130, 51); 
-    width: 30%;
-    text-align: center;
-    transition: 0.5s;
-    margin: 2%;
+.sacola-area {
+  background-color: rgb(209, 130, 51);
+  width: 30%;
+  text-align: center;
+  transition: 0.5s;
+  margin: 2%;
 }
 
-.sacola-area:hover{
-    transform: scale(1.03);          
-    transition: 0.5s;
+.sacola-area:hover {
+  transform: scale(1.03);
+  transition: 0.5s;
 }
 
-.sacola-area ul, p, li{
-    margin: 5%;
+.sacola-area ul,
+.sacola-area p,
+.sacola-area li {
+  margin: 5%;
 }
 
-#total{
-    color: white;
+#total {
+  color: white;
 }
 
-.sacola-area li{
-    background-color: white;
-    padding: 3%;
-    border-radius: 5px;
-    list-style: none;
+.sacola-area li {
+  background-color: white;
+  padding: 3%;
+  border-radius: 5px;
+  list-style: none;
 }
 
-.btn-finalizar, .meus-pedidos button, .painel-adm button{ 
-    background-color: rgb(183, 112, 42); 
-    color: white; 
-    font-weight: bold; 
-    padding: 15px; 
-    border: none; 
-    border-radius: 5px; 
-    cursor: pointer; 
-    width: 100%; 
-    transition: 0.5s;
+.btn-finalizar,
+.meus-pedidos button,
+.painel-adm button {
+  background-color: rgb(183, 112, 42);
+  color: white;
+  font-weight: bold;
+  padding: 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  transition: 0.5s;
 }
 
-.btn-finalizar:hover, .meus-pedidos button:hover{
-    background-color: rgb(161, 99, 36);
-    transition: 0.5s;
+.btn-finalizar:hover,
+.meus-pedidos button:hover {
+  background-color: rgb(161, 99, 36);
+  transition: 0.5s;
 }
 
-.meus-pedidos{
-    background-color: rgb(209, 130, 51); 
-    width: 30%;
-    text-align: center;
-    transition: 0.5s;
-    margin: 2%;
+.meus-pedidos {
+  background-color: rgb(209, 130, 51);
+  width: 30%;
+  text-align: center;
+  transition: 0.5s;
+  margin: 2%;
 }
 
-.meus-pedidos:hover{
-    transform: scale(1.03);
-    transition: 0.5s;
+.meus-pedidos:hover {
+  transform: scale(1.03);
+  transition: 0.5s;
 }
 
-.meus-pedidos input{
-    font-size: medium;
-    padding: 2%;
-    margin: 5%;
-    border: none;
-    border-radius: 5px;
+.meus-pedidos input {
+  font-size: medium;
+  padding: 2%;
+  margin: 5%;
+  border: none;
+  border-radius: 5px;
 }
 
-.meus-pedidos p{
-    background-color: white;
-    padding: 3%;
-    border-radius: 5px;   
+.meus-pedidos p {
+  background-color: white;
+  padding: 3%;
+  border-radius: 5px;
 }
 
-.painel-adm{
-    justify-content: center;
-    width: 80%;
-    margin: 0 auto;
-    margin-bottom: 5%;
-    transition: 0.5s;
+.painel-adm {
+  justify-content: center;
+  width: 80%;
+  margin: 0 auto;
+  margin-bottom: 5%;
+  transition: 0.5s;
 }
 
-.painel-adm:hover{
-    transform: scale(1.03);
-    transition: 0.5s;
+.painel-adm:hover {
+  transform: scale(1.03);
+  transition: 0.5s;
 }
 
-.painel-adm h2{
-    color: rgb(2, 47, 31);
+.painel-adm h2 {
+  color: rgb(2, 47, 31);
 }
 
-.painel-adm button{
-    background-color: rgb(2, 67, 44);
-    margin: 1%;
+.painel-adm button {
+  background-color: rgb(2, 67, 44);
+  margin: 1%;
 }
 
-.painel-adm button:hover{
-    background-color: rgb(2, 47, 31);
+.painel-adm button:hover {
+  background-color: rgb(2, 47, 31);
 }
 
-table { 
-    width: 100%; 
-    border-collapse: collapse; 
-    margin-top: 3%; 
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 3%;
 }
 
-th, td { 
-    border: 1px solid #ddd; 
-    padding: 10px; 
-    text-align: left; 
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
 }
 
-th { 
-    background-color: #f8f9fa; 
+th {
+  background-color: #f8f9fa;
 }
 
-footer{
-    background-color: rgb(209, 130, 51);
-    color: rgb(2, 47, 31);
-    text-align: center;
-    font-size: large;
-    font-weight: bold;
-    padding: 2%;    
+footer {
+  background-color: rgb(209, 130, 51);
+  color: rgb(2, 47, 31);
+  text-align: center;
+  font-size: large;
+  font-weight: bold;
+  padding: 2%;
 }
-
-/* CÓDIGOS PARA RESPONSIVIDADE */
 
 /* ================= TABLET ================= */
-@media (max-width: 768px){
-    h1{
-        font-size: 50px;
-    }
-    h2{
-        font-size: 35px;
-    }
-    .container{
-        flex-direction: column;
-        align-items: center;
-    }
-    .sacola-area, .meus-pedidos{
-        width: 90%;
-    }
-    .painel-adm{
-        width: 95%;
-    }
+@media (max-width: 768px) {
+  h1 {
+    font-size: 50px;
+  }
+  h2 {
+    font-size: 35px;
+  }
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .sacola-area,
+  .meus-pedidos {
+    width: 90%;
+  }
+  .painel-adm {
+    width: 95%;
+  }
 }
 
 /* ================= CELULAR ================= */
-@media (max-width: 480px){
-    h1{
-        font-size: 40px;
-    }
-    h2{
-        font-size: 28px;
-    }
-    .produto-card{
-        width: 90%;
-    }
-    .produto-card button{
-        width: 100%;
-    }
-    table{
-        font-size: 14px;
-    }
+@media (max-width: 480px) {
+  h1 {
+    font-size: 40px;
+  }
+  h2 {
+    font-size: 28px;
+  }
+  .produto-card {
+    width: 100%;
+    max-width: 340px;
+  }
+  .produto-card button {
+    width: 100%;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  table {
+    font-size: 14px;
+    min-width: 480px;
+  }
+  .painel-adm button {
+    width: 100%;
+    margin: 2% 0;
+  }
 }

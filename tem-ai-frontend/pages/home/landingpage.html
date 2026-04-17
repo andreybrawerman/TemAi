@@ -11,6 +11,11 @@
 
   <body>
     <header>
+      <button class="hamburger" id="hamburger" aria-label="Abrir menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
       <a href="landingpage.html" class="logo">
         <img src="../../assets/img/logo_temai.png" alt="Logo Temai" />
       </a>
@@ -107,6 +112,14 @@
 
         document.getElementById("dif").classList.add("animar");
       };
+
+      const hamburger = document.getElementById('hamburger');
+      const nav = document.querySelector('nav');
+
+      hamburger.addEventListener('click', function () {
+        nav.classList.toggle('aberto');
+        hamburger.classList.toggle('ativo');
+      });
     </script>
   </body>
 </html>

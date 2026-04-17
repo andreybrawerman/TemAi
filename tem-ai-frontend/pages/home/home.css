@@ -1,217 +1,282 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
 
-*{
-    font-family: Arial, Helvetica, sans-serif;
-    margin: 0;
-    padding: 0;
+* {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-body{
-    background-color: rgb(14, 90, 64);
+body {
+  background-color: rgb(14, 90, 64);
 }
 
-main .sec1{
-    text-align: center;
-    background-image: url("../../assets/img/temai-verde.png");
-    background-size: cover;
-    background-position: center;
-    padding: 120px 10%;
+main .sec1 {
+  text-align: center;
+  background-image: url("../../assets/img/temai-verde.png");
+  background-size: cover;
+  background-position: center;
+  padding: 120px 10%;
 }
 
-main .sec1 h1, .sec2 h1 {
-    text-align: center;
-    color: rgb(209, 130, 51);
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 100px;
-    margin: 0 0 20px 0;
+main .sec1 h1,
+.sec2 h1 {
+  text-align: center;
+  color: rgb(209, 130, 51);
+  font-family: "Bebas Neue", sans-serif;
+  font-size: 100px;
+  margin: 0 0 20px 0;
 }
 
-.sec1 h1{
-    transform: translateX(100vw);
-    transition: transform 1.5s ease;
+.sec1 h1 {
+  transform: translateX(100vw);
+  transition: transform 1.5s ease;
 }
 
-.sec1 h1.animar{
-    transform: translateX(0);
-    opacity: 1;
+.sec1 h1.animar {
+  transform: translateX(0);
+  opacity: 1;
 }
 
-main .sec1 button{
-    background-color: rgba(0, 0, 0, 0);
-    color: rgb(209, 130, 51);
-    border: 2px solid rgb(209, 130, 51);
-    border-radius: 10px;
-    padding: 10px;
-    font-size: 28px;
-    font-family: 'Bebas Neue', sans-serif;
-    cursor: pointer;
-    transition: 0.3s;
-    margin: 0% 0% 5% 0%;
+main .sec1 button {
+  background-color: rgba(0, 0, 0, 0);
+  color: rgb(209, 130, 51);
+  border: 2px solid rgb(209, 130, 51);
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 28px;
+  font-family: "Bebas Neue", sans-serif;
+  cursor: pointer;
+  transition: 0.3s;
+  margin: 0% 0% 5% 0%;
 }
 
-main section button:hover{
-    border: 2px solid rgb(234, 255, 245);
-    color: rgb(234, 255, 245);
-    transition: 0.3s;
+main section button:hover {
+  border: 2px solid rgb(234, 255, 245);
+  color: rgb(234, 255, 245);
+  transition: 0.3s;
 }
 
-#temai{
-    font-style: italic;
-    font-family: 'Bebas Neue', sans-serif;
+#temai {
+  font-style: italic;
+  font-family: "Bebas Neue", sans-serif;
 }
 
-#dif{
-    color: rgb(234, 255, 245);
-    font-family: 'Bebas Neue', sans-serif;
-    display: inline-block;
-    transform: translateX(-100vw);
-    opacity: 0;
-    transition: transform 1.5s ease;
+#dif {
+  color: rgb(234, 255, 245);
+  font-family: "Bebas Neue", sans-serif;
+  display: inline-block;
+  transform: translateX(-100vw);
+  opacity: 0;
+  transition: transform 1.5s ease;
 }
 
-#dif.animar{
-    transform: translateX(0);
-    opacity: 1;
+#dif.animar {
+  transform: translateX(0);
+  opacity: 1;
 }
 
-#dif2{
-    color: rgb(14, 90, 64);
-    font-family: 'Bebas Neue', sans-serif;
-    font-style: italic;
+#dif2 {
+  color: rgb(14, 90, 64);
+  font-family: "Bebas Neue", sans-serif;
+  font-style: italic;
 }
 
-.sec2{
-    padding: 5%;
-    background-color: rgb(209, 130, 51);
-    color: rgb(2, 47, 31);
-    font-size: 20px;
-    text-align: justify;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 40px;
+.sec2 {
+  padding: 5%;
+  background-color: rgb(209, 130, 51);
+  color: rgb(2, 47, 31);
+  font-size: 20px;
+  text-align: justify;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
 }
 
-.sec2 h1{
-    color: rgb(2, 47, 31);
-    text-align: justify;
+.sec2 h1 {
+  color: rgb(2, 47, 31);
+  text-align: justify;
 }
 
-.sec2 .card{
-    background-color: rgb(183, 112, 42);
-    padding: 2%;
-    margin: 4%;
-    border-radius: 20px;    
-    width: 45%;
-    transition: 0.5s;
+.sec2 .card {
+  background-color: rgb(183, 112, 42);
+  padding: 2%;
+  margin: 4%;
+  border-radius: 20px;
+  width: 45%;
+  transition: 0.5s;
 }
 
-.sec2 .card:hover{
-    transform: scale(1.03);          
-    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-    transition: 0.5s;
+.sec2 .card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  transition: 0.5s;
 }
 
-.sec2 img{
-    border-radius: 20px;
-    width: 30%;
-    margin: 4%;
-    height: auto;
-    transition: 0.5s;
+.sec2 img {
+  border-radius: 20px;
+  width: 30%;
+  margin: 4%;
+  height: auto;
+  transition: 0.5s;
 }
 
-.sec2 img:hover{
-    transform: scale(1.03);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-    transition: 0.5s;
+.sec2 img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  transition: 0.5s;
 }
 
-.sec3{
-    font-size: 20px;
-    display: flex;
+.sec3 {
+  font-size: 20px;
+  display: flex;
 }
 
-.sec3 .card, .card2{
-    background-color: rgb(2, 67, 44);
-    padding: 2%;
-    margin: 8%;
-    border-radius: 20px;
-    width: 50%;
-    transition: 0.5s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.sec3 .card,
+.card2 {
+  background-color: rgb(2, 67, 44);
+  padding: 2%;
+  margin: 8%;
+  border-radius: 20px;
+  width: 50%;
+  transition: 0.5s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.sec3 .card:hover, .card2:hover{
-    transform: scale(1.03);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
-    transition: 0.5s;
-
+.sec3 .card:hover,
+.card2:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  transition: 0.5s;
 }
-.sec3 h1{
-    color: rgb(183, 112, 42);
-    font-size: 60px;
-    font-family: 'Bebas Neue', sans-serif;
-    text-align: center;
-}
-
-.sec3 p{
-    margin: 3%;
-    text-align: justify;
+.sec3 h1 {
+  color: rgb(183, 112, 42);
+  font-size: 60px;
+  font-family: "Bebas Neue", sans-serif;
+  text-align: center;
 }
 
-.sec3 .card img, .card2 img{
-    margin: 5%;
-    width: 90%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 20px;
+.sec3 p {
+  margin: 3%;
+  text-align: justify;
+}
+
+.sec3 .card img,
+.card2 img {
+  margin: 5%;
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
 }
 
 /* CÓDIGOS PARA RESPONSIVIDADE */
 
 /* ================= TABLET ================= */
-@media (max-width: 768px){
-    main .sec1 h1{
-        font-size: 60px;
-    }
-    .sec2{
-        flex-direction: column;
-        text-align: center;
-    }
-    .sec2 .card{
-        width: 90%;
-    }
-    .sec2 img{
-        width: 70%;
-    }
-    .sec3{
-        flex-direction: column;
-        align-items: center;
-    }
-    .sec3 .card,
-    .sec3 .card2{
-        width: 90%;
-    }
+@media (max-width: 768px) {
+  main .sec1 h1 {
+    font-size: 60px;
+  }
+  .sec2 {
+    flex-direction: column;
+    text-align: center;
+  }
+  .sec2 .card {
+    width: 90%;
+  }
+  .sec2 img {
+    width: 70%;
+  }
+  .sec3 {
+    flex-direction: column;
+    align-items: center;
+  }
+  .sec3 .card,
+  .sec3 .card2 {
+    width: 90%;
+  }
 }
 
 /* ================= CELULAR ================= */
-@media (max-width: 480px){
-    main .sec1{
-        padding: 80px 5%;
-    }
-    main .sec1 h1{
-        font-size: 40px;
-    }
-    main .sec1 button{
-        font-size: 20px;
-    }
-    .sec2 h1, .sec3 h1{
-        font-size: 35px;
-    }
-    .sec2 img{
-        width: 90%;
-    }
+@media (max-width: 480px) {
+  main .sec1 {
+    padding: 80px 5%;
+  }
+  main .sec1 h1 {
+    font-size: 40px;
+  }
+  main .sec1 button {
+    font-size: 20px;
+  }
+  .sec2 h1,
+  .sec3 h1 {
+    font-size: 35px;
+  }
+  .sec2 img {
+    width: 90%;
+  }
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.hamburger span {
+  display: block;
+  width: 26px;
+  height: 2px;
+  background-color: rgb(209, 130, 51);
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+/* Animação do X quando ativo */
+.hamburger.ativo span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger.ativo span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.ativo span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (max-width: 480px) {
+  .hamburger {
+    display: flex;
+  }
+
+  header nav {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    width: 100%;
+    background-color: rgb(14, 90, 64);
+    padding: 16px 0;
+    z-index: 999;
+  }
+
+  header nav.aberto {
+    display: flex;
+  }
+
+  header nav a {
+    padding: 12px 24px;
+    border-bottom: 1px solid rgba(209, 130, 51, 0.2);
+  }
+
+  header nav a:last-child {
+    border-bottom: none;
+  }
 }

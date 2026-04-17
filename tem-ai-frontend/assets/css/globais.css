@@ -1,63 +1,124 @@
 /* Importação de fontes globais */
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
 
 /* Paleta de Cores Oficial do Tem Aí */
 :root {
-    --laranja: rgb(209, 130, 51);
-    --laranja-escuro: rgb(183, 112, 42);
-    --verde-cabecalho: rgb(2, 67, 44);
-    --verde-letras-cabecalho: rgb(234, 255, 245);
-    --verde-letras-hover: rgb(131, 156, 144);
-    --verde-fundo: rgb(14, 90, 64);
-    --verde-escuro: rgb(2, 47, 31);
+  --laranja: rgb(209, 130, 51);
+  --laranja-escuro: rgb(183, 112, 42);
+  --verde-cabecalho: rgb(2, 67, 44);
+  --verde-letras-cabecalho: rgb(234, 255, 245);
+  --verde-letras-hover: rgb(131, 156, 144);
+  --verde-fundo: rgb(14, 90, 64);
+  --verde-escuro: rgb(2, 47, 31);
 }
 
 /* Reset Global para todos os navegadores */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 header {
-    display: flex;
-    align-items: center;
-    background-color: rgb(2, 67, 44);
-    padding: 10px;
+  display: flex;
+  align-items: center;
+  background-color: rgb(2, 67, 44);
+  padding: 10px;
 }
 
 header img {
-    width: 120px;
-    height: auto;
-    padding: 5px;
-    border-radius: 5px;
+  width: 120px;
+  height: auto;
+  padding: 5px;
+  border-radius: 5px;
 }
 
 nav a {
-    margin: 20px;
-    text-decoration: none;
-    color: rgb(234, 255, 245);
-    transition: 0.3s;
-    font-weight: bold;
-    font-size: 18px;
+  margin: 20px;
+  text-decoration: none;
+  color: rgb(234, 255, 245);
+  transition: 0.3s;
+  font-weight: bold;
+  font-size: 18px;
 }
 
 nav a:hover {
-    color: rgb(131, 156, 144);
-    transition: 0.3s;
+  color: rgb(131, 156, 144);
+  transition: 0.3s;
 }
 
 nav a.ativo {
-    color: var(--laranja); /* Usa aquele seu laranja rgb(209, 130, 51) */
-    border-bottom: 2px solid var(--laranja); /* Opcional: um sublinhado charmoso */
+  color: var(--laranja);
+  border-bottom: 2px solid var(--laranja);
 }
 
-footer{
-    background-color: rgb(209, 130, 51);
-    color: rgb(2, 47, 31);
-    text-align: center;
-    font-size: large;
-    font-weight: bold;
-    padding: 2%;    
+footer {
+  background-color: rgb(209, 130, 51);
+  color: rgb(2, 47, 31);
+  text-align: center;
+  font-size: large;
+  font-weight: bold;
+  padding: 2%;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.hamburger span {
+  display: block;
+  width: 26px;
+  height: 2px;
+  background-color: rgb(209, 130, 51);
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+/* Animação do X quando ativo */
+.hamburger.ativo span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.hamburger.ativo span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.ativo span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (max-width: 480px) {
+  .hamburger {
+    display: flex;
+  }
+
+  header nav {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    width: 100%;
+    background-color: rgb(14, 90, 64);
+    padding: 16px 0;
+    z-index: 999;
+  }
+
+  header nav.aberto {
+    display: flex;
+  }
+
+  header nav a {
+    padding: 12px 24px;
+    border-bottom: 1px solid rgba(209, 130, 51, 0.2);
+  }
+
+  header nav a:last-child {
+    border-bottom: none;
+  }
 }

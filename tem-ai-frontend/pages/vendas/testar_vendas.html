@@ -1,95 +1,110 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>TemAí? - Área de Compras</title>
-    <link rel="stylesheet" href="vendas.css">
-    <link rel="stylesheet" href="../../assets/css/globais.css">
-    <link rel="icon" type="image/png" href="../../assets/img/logo_carrinho_redondo.png">
-</head>
-<body>
+    <link rel="stylesheet" href="vendas.css" />
+    <link rel="stylesheet" href="../../assets/css/globais.css" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="../../assets/img/logo_carrinho_redondo.png"
+    />
+  </head>
+  <body>
     <header>
-        <a href="landingpage.html" class="logo">
-            <img src="../../assets/img/logo_temai.png" alt="Logo Temai">
-        </a>
+      <a href="../home/landingpage.html" class="logo">
+        <img src="../../assets/img/logo_temai.png" alt="Logo Temai" />
+      </a>
 
-        <nav>
+      <nav>
         <a href="../home/landingpage.html">Página Inicial</a>
         <a href="../vendas/testar_vendas.html" class="ativo">Área de Compras</a>
         <a href="../estoque/estoque.html">Estoque (ADM)</a>
         <a href="../usuario/usuario.html">Usuários (ADM)</a>
         <a href="../login/login.html">Entrar</a>
         <a href="../cadastro/cadastro.html">Cadastrar</a>
-        </nav>
-    </header>
+      </nav>
 
+      <button class="hamburger" id="hamburger" aria-label="Abrir menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </header>
     <h1>Tem Aí? - Área de Compras</h1>
 
     <h2>Produtos Disponíveis</h2>
     <div id="vitrine">
-        <p>Carregando produtos...</p>
+      <p>Carregando produtos...</p>
     </div>
 
     <div class="container">
-        <section class="sacola-area">
-            <h2>🛒 Minha Sacola</h2>
-            <ul id="itens_sacola">
-                <li>Nenhum item adicionado.</li>
-            </ul>
-            <p id="total"><strong>TOTAL: R$ <span id="valor_total_sacola">0.00</span></strong></p>
-            <button class="btn-finalizar" onclick="finalizarVenda()">FINALIZAR COMPRA</button>
-        </section>
+      <section class="sacola-area">
+        <h2>🛒 Minha Sacola</h2>
+        <ul id="itens_sacola">
+          <li>Nenhum item adicionado.</li>
+        </ul>
+        <p id="total">
+          <strong>TOTAL: R$ <span id="valor_total_sacola">0.00</span></strong>
+        </p>
+        <button class="btn-finalizar" onclick="finalizarVenda()">
+          FINALIZAR COMPRA
+        </button>
+      </section>
 
-        <section class="meus-pedidos">
-            <h2>Meus Pedidos</h2>
-            <input type="number" id="busca_usuario_id" placeholder="ID do Usuário (Ex: 1)"> <br>
-            <button onclick="listarPedidosUsuario()">VER HISTÓRICO</button> 
-            <div id="lista_usuario"></div>
-        </section>
+      <section class="meus-pedidos">
+        <h2>Meus Pedidos</h2>
+        <input
+          type="number"
+          id="busca_usuario_id"
+          placeholder="ID do Usuário (Ex: 1)"
+        />
+        <br />
+        <button onclick="listarPedidosUsuario()">VER HISTÓRICO</button>
+        <div id="lista_usuario"></div>
+      </section>
     </div>
 
-
     <section class="painel-adm">
-        <h2>🛠️ Painel ADM (Vendas Realizadas)</h2>
-        <button onclick="listarPedidosAdmin()">ATUALIZAR RELATÓRIO GERAL</button>
-        <table>
-            <thead>
-                <tr>
-                    <th>Pedido</th>
-                    <th>Data</th>
-                    <th>Cliente</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody id="tabela_adm"></tbody>
-        </table>
+      <h2>🛠️ Painel ADM (Vendas Realizadas)</h2>
+      <button onclick="listarPedidosAdmin()">ATUALIZAR RELATÓRIO GERAL</button>
+      <table>
+        <thead>
+          <tr>
+            <th>Pedido</th>
+            <th>Data</th>
+            <th>Cliente</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody id="tabela_adm"></tbody>
+      </table>
     </section>
 
-    <footer>
-    Copyright © 2026 TemAí? Inc. Todos os direitos reservados.
-    </footer>
+    <footer>Copyright © 2026 TemAí? Inc. Todos os direitos reservados.</footer>
 
     <script>
-        const API = "http://localhost:5001";
-        let carrinho = [];
-        let totalGeral = 0;
-        const idUsuarioLogado = 1; // Simulando usuário Mariana logada
+      const API = "http://localhost:5001";
+      let carrinho = [];
+      let totalGeral = 0;
+      const idUsuarioLogado = 1; // Simulando usuário Mariana logada
 
-        // Carregar produtos ao abrir a página
-        window.onload = function() {
-            listarProdutos();
-        };
+      // Carregar produtos ao abrir a página
+      window.onload = function () {
+        listarProdutos();
+      };
 
-        function listarProdutos() {
-            fetch(`${API}/produtos`)
-            .then(res => res.json())
-            .then(produtos => {
-                const vitrine = document.getElementById("vitrine");
-                vitrine.innerHTML = "";
-                produtos.forEach(p => {
-                    vitrine.innerHTML += `
+      function listarProdutos() {
+        fetch(`${API}/produtos`)
+          .then((res) => res.json())
+          .then((produtos) => {
+            const vitrine = document.getElementById("vitrine");
+            vitrine.innerHTML = "";
+            produtos.forEach((p) => {
+              vitrine.innerHTML += `
                         <div class="produto-card">
                             <h3>${p.nome}</h3>
                             <p>R$ ${p.preco.toFixed(2)}</p>
@@ -99,83 +114,89 @@
                             </button>
                         </div>
                     `;
-                });
             });
+          });
+      }
+
+      function adicionarNaSacola(id, nome, preco) {
+        carrinho.push({ id_produto: id, nome: nome, preco: preco });
+        atualizarVisualizacaoSacola();
+      }
+
+      function atualizarVisualizacaoSacola() {
+        const lista = document.getElementById("itens_sacola");
+        const totalTxt = document.getElementById("valor_total_sacola");
+        lista.innerHTML = "";
+        totalGeral = 0;
+
+        if (carrinho.length === 0) {
+          lista.innerHTML = "<li>Nenhum item adicionado.</li>";
+        } else {
+          carrinho.forEach((item) => {
+            totalGeral += item.preco;
+            lista.innerHTML += `<li>${item.nome} - R$ ${item.preco.toFixed(2)}</li>`;
+          });
         }
+        totalTxt.innerText = totalGeral.toFixed(2);
+      }
 
-        function adicionarNaSacola(id, nome, preco) {
-            carrinho.push({ id_produto: id, nome: nome, preco: preco });
-            atualizarVisualizacaoSacola();
-        }
+      function finalizarVenda() {
+        if (carrinho.length === 0) return alert("Sua sacola está vazia!");
 
-        function atualizarVisualizacaoSacola() {
-            const lista = document.getElementById("itens_sacola");
-            const totalTxt = document.getElementById("valor_total_sacola");
-            lista.innerHTML = "";
-            totalGeral = 0;
+        const dadosPedido = {
+          id_usuario: idUsuarioLogado,
+          valor_total: totalGeral,
+          itens: carrinho.map((item) => ({
+            id_produto: item.id_produto,
+            quantidade: 1,
+          })),
+        };
 
-            if (carrinho.length === 0) {
-                lista.innerHTML = "<li>Nenhum item adicionado.</li>";
+        fetch(`${API}/pedidos`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(dadosPedido),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.mensagem) {
+              alert(data.mensagem);
+            } else if (data.erro) {
+              alert("Erro: " + data.erro);
             } else {
-                carrinho.forEach(item => {
-                    totalGeral += item.preco;
-                    lista.innerHTML += `<li>${item.nome} - R$ ${item.preco.toFixed(2)}</li>`;
-                });
+              alert("Erro inesperado");
             }
-            totalTxt.innerText = totalGeral.toFixed(2);
-        }
 
-        function finalizarVenda() {
-            if (carrinho.length === 0) return alert("Sua sacola está vazia!");
+            carrinho = [];
+            atualizarVisualizacaoSacola();
+            listarProdutos();
+          });
+      }
 
-            const dadosPedido = {
-                id_usuario: idUsuarioLogado,
-                valor_total: totalGeral,
-                itens: carrinho.map(item => ({
-                    id_produto: item.id_produto,
-                    quantidade: 1
-                }))
-            };
+      function listarPedidosUsuario() {
+        const id =
+          document.getElementById("busca_usuario_id").value || idUsuarioLogado;
+        fetch(`${API}/usuarios/${id}/pedidos`)
+          .then((res) => res.json())
+          .then((pedidos) => {
+            const div = document.getElementById("lista_usuario");
+            div.innerHTML = pedidos
+              .map(
+                (p) =>
+                  `<p>📦 Pedido #${p.id} - ${p.data} - <b>R$ ${p.total.toFixed(2)}</b> [${p.status}]</p>`,
+              )
+              .join("");
+          });
+      }
 
-            fetch(`${API}/pedidos`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(dadosPedido)
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.mensagem) {
-                    alert(data.mensagem);
-                } else if (data.erro) {
-                    alert("Erro: " + data.erro);
-                } else {
-                    alert("Erro inesperado");
-                }
-
-                carrinho = [];
-                atualizarVisualizacaoSacola();
-                listarProdutos();
-            });
-        }
-
-        function listarPedidosUsuario() {
-            const id = document.getElementById("busca_usuario_id").value || idUsuarioLogado;
-            fetch(`${API}/usuarios/${id}/pedidos`)
-            .then(res => res.json())
-            .then(pedidos => {
-                const div = document.getElementById("lista_usuario");
-                div.innerHTML = pedidos.map(p => 
-                    `<p>📦 Pedido #${p.id} - ${p.data} - <b>R$ ${p.total.toFixed(2)}</b> [${p.status}]</p>`
-                ).join("");
-            });
-        }
-
-        function listarPedidosAdmin() {
-            fetch(`${API}/admin/pedidos`)
-            .then(res => res.json())
-            .then(pedidos => {
-                const tabela = document.getElementById("tabela_adm");
-                tabela.innerHTML = pedidos.map(p => `
+      function listarPedidosAdmin() {
+        fetch(`${API}/admin/pedidos`)
+          .then((res) => res.json())
+          .then((pedidos) => {
+            const tabela = document.getElementById("tabela_adm");
+            tabela.innerHTML = pedidos
+              .map(
+                (p) => `
                 <tr>
                     <td>#${p.id}</td>
                     <td>${p.data}</td>
@@ -188,24 +209,34 @@
                         </button>
                     </td>
                 </tr>
-            `).join("");
-            });
-        }
+            `,
+              )
+              .join("");
+          });
+      }
 
-        function finalizarPedido(id) {
-    fetch(`${API}/pedidos/${id}/status`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            status: "Finalizado"
+      function finalizarPedido(id) {
+        fetch(`${API}/pedidos/${id}/status`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            status: "Finalizado",
+          }),
         })
-    })
-    .then(res => res.json())
-    .then(data => {
-        alert(data.mensagem || data.erro);
-        listarPedidosAdmin(); // atualiza tabela
-    });
-}
+          .then((res) => res.json())
+          .then((data) => {
+            alert(data.mensagem || data.erro);
+            listarPedidosAdmin(); // atualiza tabela
+          });
+      }
+
+      const hamburger = document.getElementById("hamburger");
+      const nav = document.querySelector("nav");
+
+      hamburger.addEventListener("click", function () {
+        nav.classList.toggle("aberto");
+        hamburger.classList.toggle("ativo");
+      });
     </script>
-</body>
+  </body>
 </html>
