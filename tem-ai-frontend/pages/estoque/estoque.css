@@ -164,3 +164,31 @@ input[type="number"] {
     -moz-appearance: textfield;
     appearance: textfield;
 }
+
+@media (max-width: 768px) {
+    .container {
+        margin: 20px 10px;
+        padding: 20px;
+    }
+
+    .form-group {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    input, .btn-principal, .btn-cancelar {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    table {
+        display: block; 
+        overflow-x: auto; 
+        white-space: nowrap;
+    }
+
+    .btn-editar, .btn-deletar {
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+}

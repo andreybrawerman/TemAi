@@ -14,9 +14,11 @@
   </head>
   <body>
     <header>
-      <a href="../home/landingpage.html" class="logo">
-        <img src="../../assets/img/logo_temai.png" alt="Logo Temai" />
-      </a>
+      <button class="hamburger" id="hamburger" aria-label="Abrir menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
 
       <nav>
         <a href="../home/landingpage.html">Página Inicial</a>
@@ -27,11 +29,9 @@
         <a href="../cadastro/cadastro.html">Cadastrar</a>
       </nav>
 
-      <button class="hamburger" id="hamburger" aria-label="Abrir menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+      <a href="../home/landingpage.html" class="logo">
+        <img src="../../assets/img/logo_temai.png" alt="Logo Temai" />
+      </a>
     </header>
     <h1>Tem Aí? - Área de Compras</h1>
 
@@ -70,20 +70,23 @@
     <section class="painel-adm">
       <h2>🛠️ Painel ADM (Vendas Realizadas)</h2>
       <button onclick="listarPedidosAdmin()">ATUALIZAR RELATÓRIO GERAL</button>
-      <table>
-        <thead>
-          <tr>
-            <th>Pedido</th>
-            <th>Data</th>
-            <th>Cliente</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Ação</th>
-          </tr>
-        </thead>
-        <tbody id="tabela_adm"></tbody>
-      </table>
-    </section>
+      
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Pedido</th>
+              <th>Data</th>
+              <th>Cliente</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody id="tabela_adm"></tbody>
+        </table>
+      </div>
+      </section>
 
     <footer>Copyright © 2026 TemAí? Inc. Todos os direitos reservados.</footer>
 

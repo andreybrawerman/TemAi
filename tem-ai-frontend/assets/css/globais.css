@@ -93,6 +93,10 @@ footer {
 }
 
 @media (max-width: 480px) {
+  header {
+    justify-content: space-between;
+  }
+
   .hamburger {
     display: flex;
   }
