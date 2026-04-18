@@ -37,6 +37,10 @@ async function carregarPerfil() {
         document.getElementById("perfil_cep").value = data.cep || "";
         document.getElementById("perfil_data").value = data.data_nascimento || "";
 
+        document.getElementById("perfil_senha_atual").value = "";
+        document.getElementById("perfil_nova_senha").value = "";
+        document.getElementById("perfil_confirma_senha").value = "";
+
         if (data.foto_perfil) {
             document.getElementById("previewFoto").src = `http://localhost:5001/uploads/${data.foto_perfil}`;
         }
@@ -92,7 +96,6 @@ document.getElementById("fotoPerfil").addEventListener("change", async (event) =
     const arquivo = event.target.files[0];
     if (!arquivo) return;
 
-    // preview imediato
     document.getElementById("previewFoto").src = URL.createObjectURL(arquivo);
 
     const formData = new FormData();
