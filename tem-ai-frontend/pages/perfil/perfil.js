@@ -1,5 +1,4 @@
 const API_URL = "http://localhost:5001/usuarios";
-
 const idUsuario = localStorage.getItem("id_usuario");
 
 if (!idUsuario) {
@@ -37,12 +36,8 @@ async function carregarPerfil() {
         document.getElementById("perfil_cep").value = data.cep || "";
         document.getElementById("perfil_data").value = data.data_nascimento || "";
 
-        document.getElementById("perfil_senha_atual").value = "";
-        document.getElementById("perfil_nova_senha").value = "";
-        document.getElementById("perfil_confirma_senha").value = "";
-
         if (data.foto_perfil) {
-            document.getElementById("previewFoto").src = `http://localhost:5001/uploads/${data.foto_perfil}`;
+            document.getElementById("previewFoto").src = `http://localhost:5001/uploads/${data.foto_perfil}?t=${new Date().getTime()}`;
         }
     } catch (error) {
         document.getElementById("perfil_msg").innerText = "Erro ao buscar dados do perfil.";
@@ -50,7 +45,19 @@ async function carregarPerfil() {
     }
 }
 
+document.getElementById("fotoPerfil").addEventListener("change", (event) => {
+    const arquivo = event.target.files[0];
+    if (!arquivo) return;
+
+    document.getElementById("previewFoto").src = URL.createObjectURL(arquivo);
+});
+
+
 document.getElementById("btnSalvarPerfil").addEventListener("click", async () => {
+    const msgBox = document.getElementById("perfil_msg");
+    msgBox.innerText = "Salvando alterações...";
+    msgBox.style.color = "var(--laranja)";
+
     const dados = {
         nome: document.getElementById("perfil_nome").value,
         email: document.getElementById("perfil_email").value,
@@ -63,67 +70,51 @@ document.getElementById("btnSalvarPerfil").addEventListener("click", async () =>
     };
 
     try {
-        const response = await fetch(`${API_URL}/${idUsuario}`, {
+        const responseTexto = await fetch(`${API_URL}/${idUsuario}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(dados)
         });
 
-        const resultado = await response.json();
+        const resultadoTexto = await responseTexto.json();
 
-        if (response.ok) {
-            document.getElementById("perfil_msg").innerText = resultado.mensagem || "Perfil atualizado com sucesso!";
-            document.getElementById("perfil_msg").style.color = "#2ecc71";
-
-            document.getElementById("perfil_senha_atual").value = "";
-            document.getElementById("perfil_nova_senha").value = "";
-            document.getElementById("perfil_confirma_senha").value = "";
-        } else {
-            let msgErro = resultado.erro || "";
-            if (resultado.erros) {
-                msgErro = resultado.erros.join(" | ");
-            }
-            document.getElementById("perfil_msg").innerText = msgErro || "Erro ao atualizar perfil.";
-            document.getElementById("perfil_msg").style.color = "#ff4d4d";
-        }
-    } catch (error) {
-        document.getElementById("perfil_msg").innerText = "Erro ao conectar com o servidor.";
-        document.getElementById("perfil_msg").style.color = "#ff4d4d";
-    }
-});
-
-document.getElementById("fotoPerfil").addEventListener("change", async (event) => {
-    const arquivo = event.target.files[0];
-    if (!arquivo) return;
-
-    document.getElementById("previewFoto").src = URL.createObjectURL(arquivo);
-
-    const formData = new FormData();
-    formData.append("foto", arquivo);
-
-    try {
-        const response = await fetch(`http://localhost:5001/usuarios/${idUsuario}/foto`, {
-            method: "POST",
-            body: formData
-        });
-
-        const resultado = await response.json();
-
-        if (!response.ok) {
-            document.getElementById("perfil_msg").innerText = resultado.erro || "Erro ao enviar imagem.";
-            document.getElementById("perfil_msg").style.color = "#ff4d4d";
+        if (!responseTexto.ok) {
+            let msgErro = resultadoTexto.erro || "";
+            if (resultadoTexto.erros) msgErro = resultadoTexto.erros.join(" | ");
+            msgBox.innerText = msgErro || "Erro ao atualizar perfil.";
+            msgBox.style.color = "#ff4d4d";
             return;
         }
 
-        document.getElementById("perfil_msg").innerText = resultado.mensagem || "Foto atualizada com sucesso!";
-        document.getElementById("perfil_msg").style.color = "#2ecc71";
+        const arquivoFoto = document.getElementById("fotoPerfil").files[0];
+        
+        if (arquivoFoto) {
+            const formData = new FormData();
+            formData.append("foto", arquivoFoto);
 
-        if (resultado.foto_perfil) {
-            document.getElementById("previewFoto").src = `http://localhost:5001/uploads/${resultado.foto_perfil}?t=${new Date().getTime()}`;
+            const responseFoto = await fetch(`${API_URL}/${idUsuario}/foto`, {
+                method: "POST",
+                body: formData
+            });
+
+            if (!responseFoto.ok) {
+                msgBox.innerText = "Textos salvos, mas houve um erro ao salvar a imagem.";
+                msgBox.style.color = "#ff4d4d";
+                return;
+            }
         }
+
+        msgBox.innerText = "Perfil atualizado com sucesso!";
+        msgBox.style.color = "#2ecc71";
+
+        document.getElementById("perfil_senha_atual").value = "";
+        document.getElementById("perfil_nova_senha").value = "";
+        document.getElementById("perfil_confirma_senha").value = "";
+        document.getElementById("fotoPerfil").value = ""; 
+
     } catch (error) {
-        document.getElementById("perfil_msg").innerText = "Erro ao enviar a foto.";
-        document.getElementById("perfil_msg").style.color = "#ff4d4d";
+        msgBox.innerText = "Erro ao conectar com o servidor.";
+        msgBox.style.color = "#ff4d4d";
     }
 });
 
