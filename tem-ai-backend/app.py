@@ -3,11 +3,20 @@ from flask_cors import CORS
 import mysql.connector 
 from datetime import datetime
 from api_handler import buscar_endereco_por_cep
-from validacoes import validar_usuario
+from validacoes import validar_usuario, validar_email, validar_cpf
+import re
 from werkzeug.security import generate_password_hash, check_password_hash
+import os
+from werkzeug.utils import secure_filename
+from flask import send_from_directory
 
 app = Flask(__name__)
 CORS(app)
+
+UPLOAD_FOLDER = 'uploads'
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 def conectar():
     return mysql.connector.connect(
@@ -82,54 +91,156 @@ def buscar_usuario(id):
     conn = conectar()
     cursor = conn.cursor(dictionary=True)
 
-    cursor.execute("SELECT ID_usuario, nome, email, cpf, cep FROM Usuario WHERE ID_usuario = %s", (id,))
+    cursor.execute("""
+        SELECT ID_usuario, nome, email, cpf, cep, data_nascimento, foto_perfil
+        FROM Usuario
+        WHERE ID_usuario = %s
+    """, (id,))
     usuario = cursor.fetchone()
 
     cursor.close()
     conn.close()
 
     if usuario:
+        if usuario["data_nascimento"]:
+            usuario["data_nascimento"] = usuario["data_nascimento"].strftime("%Y-%m-%d")
         return jsonify(usuario)
     else:
         return jsonify({"erro": "Usuário não encontrado"}), 404
+    
+@app.route('/uploads/<path:filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route('/usuarios/<int:id>/foto', methods=['POST'])
+def upload_foto_perfil(id):
+    try:
+        if 'foto' not in request.files:
+            return jsonify({"erro": "Nenhuma imagem enviada."}), 400
+
+        arquivo = request.files['foto']
+
+        if arquivo.filename == '':
+            return jsonify({"erro": "Arquivo inválido."}), 400
+
+        extensoes_permitidas = {'png', 'jpg', 'jpeg', 'gif'}
+        extensao = arquivo.filename.rsplit('.', 1)[1].lower() if '.' in arquivo.filename else ''
+
+        if extensao not in extensoes_permitidas:
+            return jsonify({"erro": "Formato de imagem não permitido."}), 400
+
+        nome_seguro = secure_filename(f"perfil_{id}.{extensao}")
+        caminho_arquivo = os.path.join(app.config['UPLOAD_FOLDER'], nome_seguro)
+        arquivo.save(caminho_arquivo)
+
+        conn = conectar()
+        cursor = conn.cursor()
+
+        cursor.execute(
+            "UPDATE Usuario SET foto_perfil = %s WHERE ID_usuario = %s",
+            (nome_seguro, id)
+        )
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+        return jsonify({
+            "mensagem": "Foto de perfil atualizada com sucesso!",
+            "foto_perfil": nome_seguro
+        })
+
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 500
     
 @app.route('/usuarios/<int:id>', methods=['PUT'])
 def atualizar_usuario(id):
     data = request.json
 
-    nome = data['nome']
-    email = data['email']
-    cpf = data['cpf']
-    cep = data['cep']
+    try:
+        nome = data['nome']
+        email = data['email']
+        cpf = data['cpf']
+        cep = data['cep']
+        data_nasc = datetime.strptime(data['data_nascimento'], "%Y-%m-%d").date()
 
-    from datetime import datetime
-    data_nasc = datetime.strptime(data['data_nascimento'], "%Y-%m-%d").date()
-    senha = data.get('senha', "Teste123")  # pode adaptar depois
-    confirma_senha = data.get('confirma_senha', "Teste123")
+        senha_atual = data.get('senha_atual')
+        nova_senha = data.get('nova_senha')
+        confirma_senha = data.get('confirma_senha')
 
-    erros = validar_usuario(nome, data_nasc, senha, confirma_senha, cpf, email)
-    if erros:
-        return jsonify({"erros": erros}), 400
+        if not senha_atual:
+            return jsonify({"erro": "Informe a senha atual para confirmar a alteração."}), 400
 
-    conn = conectar()
-    cursor = conn.cursor()
+        conn = conectar()
+        cursor = conn.cursor(dictionary=True)
 
-    sql = """
-    UPDATE Usuario 
-    SET nome=%s, email=%s, cpf=%s, cep=%s
-    WHERE ID_usuario=%s
-    """
+        cursor.execute("SELECT senha FROM Usuario WHERE ID_usuario = %s", (id,))
+        usuario = cursor.fetchone()
 
-    cursor.execute(sql, (nome, email, cpf, cep, id))
-    conn.commit()
+        if not usuario:
+            cursor.close()
+            conn.close()
+            return jsonify({"erro": "Usuário não encontrado"}), 404
 
-    if cursor.rowcount == 0:
-        return jsonify({"erro": "Usuário não encontrado"}), 404
+        if not check_password_hash(usuario['senha'], senha_atual):
+            cursor.close()
+            conn.close()
+            return jsonify({"erro": "Senha atual incorreta."}), 401
 
-    cursor.close()
-    conn.close()
+        erros = []
 
-    return jsonify({"mensagem": "Usuário atualizado com sucesso!"})
+        if not nome or len(nome.strip()) < 5:
+            erros.append("Nome deve ter pelo menos 5 caracteres.")
+
+        if not validar_email(email):
+            erros.append("E-mail inválido.")
+
+        if not validar_cpf(cpf):
+            erros.append("CPF inválido.")
+
+        hoje = datetime.today().date()
+        if data_nasc > hoje:
+            erros.append("Data de nascimento no futuro.")
+        else:
+            idade = hoje.year - data_nasc.year - ((hoje.month, hoje.day) < (data_nasc.month, data_nasc.day))
+            if idade < 18:
+                erros.append("Usuário deve ser maior de idade.")
+
+        if nova_senha:
+            if nova_senha != confirma_senha:
+                erros.append("As senhas não coincidem.")
+            elif not re.match(r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$', nova_senha):
+                erros.append("A senha deve ter no mínimo 8 caracteres, incluindo letras maiúsculas, minúsculas e números.")
+
+        if erros:
+            cursor.close()
+            conn.close()
+            return jsonify({"erros": erros}), 400
+
+        if nova_senha:
+            senha_hash = generate_password_hash(nova_senha)
+            sql = """
+            UPDATE Usuario
+            SET nome=%s, email=%s, cpf=%s, cep=%s, data_nascimento=%s, senha=%s
+            WHERE ID_usuario=%s
+            """
+            cursor.execute(sql, (nome, email, cpf, cep, data['data_nascimento'], senha_hash, id))
+        else:
+            sql = """
+            UPDATE Usuario
+            SET nome=%s, email=%s, cpf=%s, cep=%s, data_nascimento=%s
+            WHERE ID_usuario=%s
+            """
+            cursor.execute(sql, (nome, email, cpf, cep, data['data_nascimento'], id))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return jsonify({"mensagem": "Usuário atualizado com sucesso!"})
+
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 500
 
 @app.route('/usuarios/<int:id>', methods=['DELETE'])
 def deletar_usuario(id):

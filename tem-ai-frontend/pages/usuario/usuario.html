@@ -23,9 +23,7 @@
         <a href="../vendas/testar_vendas.html">Área de Compras</a>
         <a href="../estoque/estoque.html">Estoque (ADM)</a>
         <a href="usuario.html" class="ativo">Usuários (ADM)</a>
-        <a href="../login/login.html">Entrar</a>
-        <a href="../cadastro/cadastro.html">Cadastrar</a>
-    </nav>
+        <a href="../login/login.html">Sair</a>
       </nav>
     </header>
 
@@ -60,18 +58,25 @@
             <input id="up_cpf" placeholder="CPF" />
             <input id="up_cep" placeholder="CEP" />
             <input id="up_data" type="date" />
+            
             <div class="input-container">
-              <input id="up_senha" type="password" placeholder="Nova Senha" />
-              <button type="button" class="password-toggle" onclick="toggleSenha('up_senha', 'eyeIcon1')">
-                  <img src="../../assets/img/olho.png" alt="Mostrar Senha" id="eyeIcon1">
-              </button>
-          </div>
-          <div class="input-container">
-              <input id="up_confirma_senha" type="password" placeholder="Confirmar Senha" />
-              <button type="button" class="password-toggle" onclick="toggleSenha('up_confirma_senha', 'eyeIcon2')">
+              <input id="nova_senha" type="password" placeholder="Nova Senha (opcional)" />
+              <button type="button" class="password-toggle" onclick="toggleSenha('nova_senha', 'eyeIcon2')">
                   <img src="../../assets/img/olho.png" alt="Mostrar Senha" id="eyeIcon2">
               </button>
-          </div>
+            </div>
+            <div class="input-container">
+              <input id="confirma_senha" type="password" placeholder="Confirmar Nova Senha" />
+              <button type="button" class="password-toggle" onclick="toggleSenha('confirma_senha', 'eyeIcon3')">
+                  <img src="../../assets/img/olho.png" alt="Mostrar Senha" id="eyeIcon3">
+              </button>
+            </div>
+            <div class="input-container">
+              <input id="senha_atual" type="password" placeholder="Senha Atual (obrigatória)" />
+              <button type="button" class="password-toggle" onclick="toggleSenha('senha_atual', 'eyeIcon1')">
+                  <img src="../../assets/img/olho.png" alt="Mostrar Senha" id="eyeIcon1">
+              </button>
+            </div>
           </div>
           <button class="btn-principal" id="btnAtualizar">
             Salvar Alterações

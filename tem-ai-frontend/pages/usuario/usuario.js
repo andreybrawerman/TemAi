@@ -13,7 +13,36 @@ function toggleSenha(inputId, iconId) {
   }
 }
 
-// Listar Usuários
+document.getElementById('up_id').addEventListener('blur', async () => {
+    const id = document.getElementById('up_id').value.trim();
+
+    if (!id) return;
+
+    try {
+        const response = await fetch(`${API_URL}/${id}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+            document.getElementById('update_msg').innerText = data.erro || "Usuário não encontrado.";
+            document.getElementById('update_msg').style.color = "#ff4d4d";
+            return;
+        }
+
+        document.getElementById('up_nome').value = data.nome || "";
+        document.getElementById('up_email').value = data.email || "";
+        document.getElementById('up_cpf').value = data.cpf || "";
+        document.getElementById('up_cep').value = data.cep || "";
+        document.getElementById('up_data').value = data.data_nascimento || "";
+
+        document.getElementById('update_msg').innerText = "Dados carregados com sucesso.";
+        document.getElementById('update_msg').style.color = "#2ecc71";
+
+    } catch (error) {
+        document.getElementById('update_msg').innerText = "Erro ao buscar usuário.";
+        document.getElementById('update_msg').style.color = "#ff4d4d";
+    }
+});
+
 document.getElementById("btnListar").addEventListener("click", async () => {
   try {
     const response = await fetch(API_URL);
@@ -31,71 +60,73 @@ document.getElementById("btnListar").addEventListener("click", async () => {
   }
 });
 
-// Buscar por ID
-document.getElementById("btnBuscar").addEventListener("click", async () => {
-  const id = document.getElementById("buscar_id").value;
-  if (!id) return alert("Informe um ID");
+document.getElementById('btnBuscar').addEventListener('click', async () => {
+    const id = document.getElementById('buscar_id').value;
+    if (!id) return alert("Informe um ID");
 
-  try {
-    const response = await fetch(`${API_URL}/${id}`);
-    const data = await response.json();
-    document.getElementById("buscar_result").innerText = JSON.stringify(
-      data,
-      null,
-      2,
-    );
-  } catch (error) {
-    document.getElementById("buscar_result").innerText =
-      "Usuário não encontrado.";
-  }
-});
+    try {
+        const response = await fetch(`${API_URL}/${id}`);
+        const data = await response.json();
 
-// Atualizar Usuário
-// NO usuario.js, SUBSTITUA TODO O BLOCO DO EVENTO 'btnAtualizar' POR ESTE:
+        if (!response.ok) {
+            document.getElementById('buscar_result').innerText = data.erro || "Usuário não encontrado.";
+            return;
+        }
 
-document.getElementById("btnAtualizar").addEventListener("click", async () => {
-  const id = document.getElementById("up_id").value;
-  const dados = {
-    nome: document.getElementById("up_nome").value,
-    email: document.getElementById("up_email").value,
-    cpf: document.getElementById("up_cpf").value,
-    cep: document.getElementById("up_cep").value,
-    data_nascimento: document.getElementById("up_data").value,
-    senha: document.getElementById("up_senha").value,
-    confirma_senha: document.getElementById("up_confirma_senha").value,
-  };
+        document.getElementById('buscar_result').innerText = JSON.stringify(data, null, 2);
 
-  try {
-    const response = await fetch(`${API_URL}/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(dados),
-    });
-
-    const resultado = await response.json();
-
-    if (response.ok) {
-      document.getElementById("update_msg").innerText =
-        resultado.mensagem || "✅ Atualizado com sucesso!";
-      document.getElementById("update_msg").style.color = "#2ecc71";
-    } else {
-      let msgErro = resultado.erro || "";
-      if (resultado.erros) {
-        msgErro = resultado.erros.join(" | ");
-      }
-      document.getElementById("update_msg").innerText =
-        msgErro || "Erro ao atualizar usuário.";
-      document.getElementById("update_msg").style.color = "#ff4d4d";
+        document.getElementById('up_id').value = data.ID_usuario || "";
+        document.getElementById('up_nome').value = data.nome || "";
+        document.getElementById('up_email').value = data.email || "";
+        document.getElementById('up_cpf').value = data.cpf || "";
+        document.getElementById('up_cep').value = data.cep || "";
+        document.getElementById('up_data').value = data.data_nascimento || "";
+    } catch (error) {
+        document.getElementById('buscar_result').innerText = "Usuário não encontrado.";
     }
-  } catch (error) {
-    console.error("Erro ao atualizar:", error);
-    document.getElementById("update_msg").innerText =
-      "Erro ao conectar com o servidor.";
-    document.getElementById("update_msg").style.color = "#ff4d4d";
-  }
 });
 
-// Deletar Usuário
+document.getElementById('btnAtualizar').addEventListener('click', async () => {
+    const id = document.getElementById('up_id').value;
+
+    const dados = {
+        nome: document.getElementById('up_nome').value,
+        email: document.getElementById('up_email').value,
+        cpf: document.getElementById('up_cpf').value,
+        cep: document.getElementById('up_cep').value,
+        data_nascimento: document.getElementById('up_data').value,
+        senha_atual: document.getElementById('senha_atual').value,
+        nova_senha: document.getElementById('nova_senha').value,
+        confirma_senha: document.getElementById('confirma_senha').value
+    };
+
+    try {
+        const response = await fetch(`${API_URL}/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados)
+        });
+
+        const resultado = await response.json();
+
+        if (response.ok) {
+            document.getElementById('update_msg').innerText = resultado.mensagem || "✅ Atualizado com sucesso!";
+            document.getElementById('update_msg').style.color = "#2ecc71";
+        } else {
+            let msgErro = resultado.erro || "";
+            if (resultado.erros) {
+                msgErro = resultado.erros.join(" | ");
+            }
+            document.getElementById('update_msg').innerText = msgErro || "Erro ao atualizar usuário.";
+            document.getElementById('update_msg').style.color = "#ff4d4d";
+        }
+    } catch (error) {
+        console.error("Erro ao atualizar:", error);
+        document.getElementById('update_msg').innerText = "Erro ao conectar com o servidor.";
+        document.getElementById('update_msg').style.color = "#ff4d4d";
+    }
+});
+
 document.getElementById("btnDeletar").addEventListener("click", async () => {
   const id = document.getElementById("del_id").value;
   if (!id || !confirm("Deseja realmente excluir este usuário?")) return;
