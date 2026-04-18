@@ -117,12 +117,34 @@ input {
     font-weight: bold;
 }
 
+header {
+    position: relative;
+    z-index: 1000;
+}
+
+.logo img {
+    max-width: 140px;
+    height: auto;
+    display: block;
+}
+
 @media (max-width: 768px) {
-    .form-grid {
-        grid-template-columns: 1fr;
+    .perfil-container {
+        padding: 20px 12px;
+        align-items: flex-start;
+    }
+
+    .perfil-card {
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+    .foto-preview {
+        width: 110px;
+        height: 110px;
     }
 
     .perfil-card h1 {
-        font-size: 38px;
+        font-size: 34px;
     }
 }
