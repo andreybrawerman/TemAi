@@ -124,8 +124,16 @@ document.getElementById('btnAtualizar').addEventListener('click', async () => {
         const resultado = await response.json();
 
         if (response.ok) {
-            document.getElementById('update_msg').innerText = resultado.mensagem || "✅ Atualizado com sucesso!";
-            document.getElementById('update_msg').style.color = "#2ecc71";
+            document.getElementById('update_msg').innerText = ""; 
+            Swal.fire({
+                title: resultado.mensagem || "Usuário atualizado com sucesso!",
+                icon: "success",
+                confirmButtonText: "OK"
+            });
+
+            document.getElementById('senha_atual').value = "";
+            document.getElementById('nova_senha').value = "";
+            document.getElementById('confirma_senha').value = "";
         } else {
             let msgErro = resultado.erro || "";
             if (resultado.erros) {
@@ -153,6 +161,8 @@ document.getElementById("btnDeletar").addEventListener("click", async () => {
           icon: "success",
           confirmButtonText: "OK"
         });
+        document.getElementById("del_id").value = "";
+        document.getElementById("btnListar").click();
     }
   } catch (error) {
     console.error("Erro ao deletar:", error);
