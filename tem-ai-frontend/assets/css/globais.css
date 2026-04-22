@@ -92,7 +92,7 @@ footer {
   transform: translateY(-7px) rotate(-45deg);
 }
 
-@media (max-width: 480px) {
+@media (max-width: 1080px) {
   header {
     justify-content: space-between;
   }

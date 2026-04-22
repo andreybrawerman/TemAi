@@ -40,8 +40,8 @@ section {
   gap: 20px;
   flex-wrap: wrap;
   margin-bottom: 20px;
-  align-items: center;
   justify-content: center;
+  align-items: stretch; 
 }
 
 .produto-card {
@@ -52,6 +52,9 @@ section {
   text-align: center;
   background: #fff;
   transition: 0.5s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; 
 }
 
 .produto-card p {
