@@ -199,6 +199,10 @@ def atualizar_usuario(id):
         if not validar_cpf(cpf):
             erros.append("CPF inválido.")
 
+        endereco = buscar_endereco_por_cep(cep)
+        if not endereco:
+            erros.append("CEP inválido ou não encontrado.")
+
         hoje = datetime.today().date()
         if data_nasc > hoje:
             erros.append("Data de nascimento no futuro.")
