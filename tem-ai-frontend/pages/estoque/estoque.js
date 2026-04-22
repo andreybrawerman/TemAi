@@ -1,5 +1,14 @@
 const API_URL = "http://localhost:5001/produtos";
 
+function confirmar(msg) {
+  return Swal.fire({
+    title: msg,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Sim",
+    cancelButtonText: "Cancelar"
+  }).then(result => result.isConfirmed);
+}
 // 1. Função para carregar (Listar) os produtos na tabela (GET)
 async function carregarProdutos() {
   try {
@@ -25,7 +34,12 @@ async function carregarProdutos() {
     });
   } catch (erro) {
     console.error("Erro ao carregar produtos:", erro);
-    alert("Erro ao conectar com o servidor. O Flask está rodando?");
+    Swal.fire({
+    title: 'Erro!',
+    text: 'O servidor flask está rodando?',
+    icon: 'error',
+    confirmButtonText: 'OK'
+    });
   }
 }
 
@@ -55,12 +69,21 @@ document
       const resultado = await resposta.json();
 
       if (resposta.ok) {
-        alert(id ? "Produto atualizado!" : "Produto cadastrado com sucesso!");
+        Swal.fire({
+          title: id ? "Produto atualizado!" : "Produto cadastrado com sucesso!",
+          icon: "success",
+          confirmButtonText: "OK"
+        });
         cancelarEdicao();
         carregarProdutos();
       } else {
         if (resultado.id_existente) {
-          alert(`Produto já existe! ID: ${resultado.id_existente}`);
+          Swal.fire({
+        title: 'Erro!',
+        text: `Produto já existe! ID: ${resultado.id_existente}`,
+        icon: 'error',
+        confirmButtonText: 'OK'
+        });
         } else {
           alert(resultado.erro || "Erro ao salvar o produto.");
         }
@@ -72,10 +95,16 @@ document
 
 // 3. Função para Deletar um produto (DELETE)
 async function deletarProduto(id) {
-  if (confirm("Tem certeza que deseja excluir este produto?")) {
+  if (await confirmar("Tem certeza que deseja excluir este produto?")) {
+    
     try {
       const resposta = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
       if (resposta.ok) {
+        Swal.fire({
+          title: "Excluído!",
+          text: "Produto removido com sucesso.",
+          icon: "success"
+        });
         carregarProdutos();
       }
     } catch (erro) {
