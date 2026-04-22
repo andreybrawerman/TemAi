@@ -9,6 +9,7 @@ function confirmar(msg) {
     cancelButtonText: "Cancelar"
   }).then(result => result.isConfirmed);
 }
+
 // 1. Função para carregar (Listar) os produtos na tabela (GET)
 async function carregarProdutos() {
   try {

@@ -1,5 +1,15 @@
 const API_URL = "http://localhost:5001/usuarios";
 
+function confirmar(msg) {
+  return Swal.fire({
+    title: msg,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Sim",
+    cancelButtonText: "Cancelar"
+  }).then(result => result.isConfirmed);
+}
+
 function toggleSenha(inputId, iconId) {
   const passwordInput = document.getElementById(inputId);
   const eyeIconImage = document.getElementById(iconId);
@@ -62,7 +72,11 @@ document.getElementById("btnListar").addEventListener("click", async () => {
 
 document.getElementById('btnBuscar').addEventListener('click', async () => {
     const id = document.getElementById('buscar_id').value;
-    if (!id) return alert("Informe um ID");
+    if (!id) return Swal.fire({
+          title: "Informe um ID",
+          icon: "error",
+          confirmButtonText: "OK"
+        });;
 
     try {
         const response = await fetch(`${API_URL}/${id}`);
@@ -129,13 +143,16 @@ document.getElementById('btnAtualizar').addEventListener('click', async () => {
 
 document.getElementById("btnDeletar").addEventListener("click", async () => {
   const id = document.getElementById("del_id").value;
-  if (!id || !confirm("Deseja realmente excluir este usuário?")) return;
+  if (!id || !(await confirmar("Deseja realmente excluir este usuário?"))) return;
 
   try {
     const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
     if (response.ok) {
-      document.getElementById("delete_msg").innerText = "🗑️ Usuário removido.";
-      document.getElementById("delete_msg").style.color = "#ff4d4d";
+       Swal.fire({
+          title:"Usuário excluído com sucesso.",
+          icon: "success",
+          confirmButtonText: "OK"
+        });
     }
   } catch (error) {
     console.error("Erro ao deletar:", error);

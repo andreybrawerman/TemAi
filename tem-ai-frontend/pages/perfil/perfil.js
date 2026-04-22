@@ -2,7 +2,12 @@ const API_URL = "http://localhost:5001/usuarios";
 const idUsuario = localStorage.getItem("id_usuario");
 
 if (!idUsuario) {
-    alert("Usuário não está logado.");
+    Swal.fire({
+    title: 'Erro!',
+    text: 'Usuário não está logado.',
+    icon: 'error',
+    confirmButtonText: 'OK'
+    });
     window.location.href = "../login/login.html";
 }
 
