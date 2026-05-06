@@ -110,6 +110,12 @@ input {
     width: 22px;
 }
 
+label{
+    color: rgb(234, 255, 245);
+    margin: 5px;
+    font-size: 14px;
+}
+
 .btn-salvar {
     width: 100%;
     margin-top: 20px;
