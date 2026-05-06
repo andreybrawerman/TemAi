@@ -278,7 +278,7 @@ def login():
         conn = conectar()
         cursor = conn.cursor(dictionary=True, buffered=True) 
         
-        sql = "SELECT ID_usuario, nome, senha FROM Usuario WHERE email = %s"
+        sql = "SELECT ID_usuario, nome, senha, tipo FROM Usuario WHERE email = %s"
         cursor.execute(sql, (email,))
         usuario = cursor.fetchone()
 
@@ -290,7 +290,8 @@ def login():
                 return jsonify({
                     "mensagem": "Login realizado com sucesso!",
                     "id_usuario": usuario['ID_usuario'],
-                    "nome": usuario['nome']
+                    "nome": usuario['nome'],
+                    "tipo": usuario['tipo']
                 }), 200
             else:
                 return jsonify({"erro": "Senha incorreta"}), 401

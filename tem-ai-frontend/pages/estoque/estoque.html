@@ -22,10 +22,13 @@
       <nav>
         <a href="../home/landingpage.html">Página Inicial</a>
         <a href="../vendas/testar_vendas.html">Área de Compras</a>
-        <a href="../estoque/estoque.html" class="ativo">Estoque (ADM)</a>
-        <a href="../usuario/usuario.html">Usuários (ADM)</a>
+        
+        <a href="../estoque/estoque.html" class="ativo admin-only">Estoque (ADM)</a>
+        <a href="../usuario/usuario.html" class="admin-only">Usuários (ADM)</a>
+        <a href="../vendas/painel_vendas.html" class="admin-only">Vendas (ADM)</a>
+
         <a href="../perfil/perfil.html">Perfil</a>
-        <a href="../login/login.html">Sair</a>
+        <a href="#" onclick="logout()">Sair</a>
     </nav>
       </nav>
     </header>

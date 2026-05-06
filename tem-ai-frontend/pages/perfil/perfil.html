@@ -23,10 +23,13 @@
     <nav>
       <a href="../home/landingpage.html">Página Inicial</a>
       <a href="../vendas/testar_vendas.html">Área de Compras</a>
-      <a href="../estoque/estoque.html">Estoque (ADM)</a>
-      <a href="../usuario/usuario.html">Usuários (ADM)</a>
+
+      <a href="../estoque/estoque.html" class="admin-only">Estoque (ADM)</a>
+      <a href="../usuario/usuario.html" class="admin-only">Usuários (ADM)</a>
+      <a href="../vendas/painel_vendas.html" class="admin-only">Vendas (ADM)</a>
+
       <a href="perfil.html" class="ativo">Perfil</a>
-      <a href="../login/login.html">Sair</a>
+      <a href="#" onclick="logout()">Sair</a>
     </nav>
   </header>
 
@@ -73,7 +76,11 @@
       <p id="perfil_msg" class="feedback"></p>
     </section>
   </main>
-
+  <script src="../../assets/js/auth.js"></script>
+  <script>
+    verificarLogin();
+    controlarMenuAdmin();
+  </script>
   <script src="perfil.js"></script>
 </body>
 </html>

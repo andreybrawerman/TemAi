@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TemAí? - Administração de Usuários</title>
+
+    <script src="../../assets/js/auth.js"></script>
+    <script>
+      bloquearAdminAntesDeCarregar();
+    </script>
+
     <link rel="stylesheet" href="../../assets/css/globais.css" />
     <link rel="stylesheet" href="usuario.css" />
     <link rel="icon" type="image/png" href="../../assets/img/logo_carrinho_redondo.png">
@@ -21,10 +27,13 @@
       <nav>
         <a href="../home/landingpage.html">Página Inicial</a>
         <a href="../vendas/testar_vendas.html">Área de Compras</a>
-        <a href="../estoque/estoque.html">Estoque (ADM)</a>
-        <a href="usuario.html" class="ativo">Usuários (ADM)</a>
+        
+        <a href="../estoque/estoque.html" class="admin-only">Estoque (ADM)</a>
+        <a href="usuario.html" class="ativo admin-only">Usuários (ADM)</a>
+        <a href="../vendas/painel_vendas.html" class="admin-only">Vendas (ADM)</a>
+        
         <a href="../perfil/perfil.html">Perfil</a>
-        <a href="../login/login.html">Sair</a>
+        <a href="#" onclick="logout()">Sair</a>
       </nav>
     </header>
 
@@ -96,7 +105,7 @@
       </div>
     </main>
 
-    <script src="usuario.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="usuario.js"></script>
   </body>
 </html>

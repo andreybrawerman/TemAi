@@ -39,6 +39,7 @@ document
         localStorage.setItem("usuarioLogado", JSON.stringify(result));
         localStorage.setItem("id_usuario", result.id_usuario);
         localStorage.setItem("nome_usuario", result.nome);
+        localStorage.setItem("tipo_usuario", result.tipo);
 
         setTimeout(() => {
           window.location.href = "../vendas/testar_vendas.html";
