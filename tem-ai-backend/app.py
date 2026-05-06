@@ -38,6 +38,8 @@ def cadastrar_usuario():
         data_nasc_str = data['data_nascimento']
         cep = data['cep']
         cpf = data['cpf']
+        numero = data.get('numero', '')
+        complemento = data.get('complemento', '')
 
         data_nasc = datetime.strptime(data_nasc_str, "%Y-%m-%d").date()
 
@@ -56,13 +58,13 @@ def cadastrar_usuario():
 
         sql = """
         INSERT INTO Usuario 
-        (nome, email, senha, data_nascimento, cpf, cep, logradouro, cidade, estado) 
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        (nome, email, senha, data_nascimento, cpf, cep, logradouro, numero, complemento, cidade, estado) 
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
 
         cursor.execute(sql, (
             nome, email, senha_hash, data_nasc_str, cpf, cep,
-            endereco['logradouro'], endereco['cidade'], endereco['estado']
+            endereco['logradouro'], numero, complemento, endereco['cidade'], endereco['estado']
         ))
 
         conn.commit()
@@ -93,7 +95,7 @@ def buscar_usuario(id):
     cursor = conn.cursor(dictionary=True)
 
     cursor.execute("""
-        SELECT ID_usuario, nome, email, cpf, cep, data_nascimento, foto_perfil
+        SELECT ID_usuario, nome, email, cpf, cep, logradouro, numero, complemento, cidade, estado, data_nascimento, foto_perfil
         FROM Usuario
         WHERE ID_usuario = %s
     """, (id,))
@@ -164,6 +166,11 @@ def atualizar_usuario(id):
         cpf = data['cpf']
         cep = data['cep']
         data_nasc = datetime.strptime(data['data_nascimento'], "%Y-%m-%d").date()
+        logradouro = data.get('endereco_da_tela')
+        numero = data.get('numero')
+        complemento = data.get('complemento')
+        cidade = data.get('cidade')
+        estado = data.get('estado')
 
         senha_atual = data.get('senha_atual')
         nova_senha = data.get('nova_senha')
@@ -226,17 +233,17 @@ def atualizar_usuario(id):
             senha_hash = generate_password_hash(nova_senha)
             sql = """
             UPDATE Usuario
-            SET nome=%s, email=%s, cpf=%s, cep=%s, data_nascimento=%s, senha=%s
+            SET nome=%s, email=%s, cpf=%s, cep=%s, data_nascimento=%s, logradouro=%s, numero=%s, complemento=%s, cidade=%s, estado=%s, senha=%s
             WHERE ID_usuario=%s
             """
-            cursor.execute(sql, (nome, email, cpf, cep, data['data_nascimento'], senha_hash, id))
+            cursor.execute(sql, (nome, email, cpf, cep, data['data_nascimento'], logradouro, numero, complemento, cidade, estado, senha_hash, id))
         else:
             sql = """
             UPDATE Usuario
-            SET nome=%s, email=%s, cpf=%s, cep=%s, data_nascimento=%s
+            SET nome=%s, email=%s, cpf=%s, cep=%s, data_nascimento=%s, logradouro=%s, numero=%s, complemento=%s, cidade=%s, estado=%s
             WHERE ID_usuario=%s
             """
-            cursor.execute(sql, (nome, email, cpf, cep, data['data_nascimento'], id))
+            cursor.execute(sql, (nome, email, cpf, cep, data['data_nascimento'], logradouro, numero, complemento, cidade, estado, id))
 
         conn.commit()
         cursor.close()
