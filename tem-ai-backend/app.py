@@ -265,6 +265,133 @@ def deletar_usuario(id):
 
     return jsonify({"mensagem": "Usuário deletado com sucesso!"})
 
+@app.route('/usuarios/<int:id>/tornar-admin', methods=['PUT'])
+def tornar_admin(id):
+    data = request.json
+    id_admin_logado = data.get("id_admin_logado")
+
+    if not id_admin_logado:
+        return jsonify({"erro": "Admin logado não informado."}), 400
+
+    try:
+        conn = conectar()
+        cursor = conn.cursor(dictionary=True)
+
+        cursor.execute(
+            "SELECT tipo FROM Usuario WHERE ID_usuario = %s",
+            (id_admin_logado,)
+        )
+
+        admin = cursor.fetchone()
+
+        if not admin:
+            cursor.close()
+            conn.close()
+            return jsonify({"erro": "Administrador não encontrado."}), 404
+
+        if admin["tipo"] != "admin":
+            cursor.close()
+            conn.close()
+            return jsonify({"erro": "Apenas administradores podem tornar outro usuário admin."}), 403
+
+        cursor.execute(
+            "UPDATE Usuario SET tipo = %s WHERE ID_usuario = %s",
+            ("admin", id)
+        )
+
+        conn.commit()
+
+        if cursor.rowcount == 0:
+            cursor.close()
+            conn.close()
+            return jsonify({"erro": "Usuário não encontrado"}), 404
+
+        cursor.close()
+        conn.close()
+
+        return jsonify({"mensagem": "Usuário promovido a administrador com sucesso!"})
+
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 500
+    
+@app.route('/admin/usuarios/<int:id>', methods=['PUT'])
+def admin_atualizar_usuario(id):
+    data = request.json
+
+    try:
+        nome = data['nome']
+        email = data['email']
+        cpf = data['cpf']
+        cep = data['cep']
+        data_nasc = datetime.strptime(data['data_nascimento'], "%Y-%m-%d").date()
+
+        erros = []
+
+        if not nome or len(nome.strip()) < 5:
+            erros.append("Nome deve ter pelo menos 5 caracteres.")
+
+        if not validar_email(email):
+            erros.append("E-mail inválido.")
+
+        if not validar_cpf(cpf):
+            erros.append("CPF inválido.")
+
+        endereco = buscar_endereco_por_cep(cep)
+        if not endereco:
+            erros.append("CEP inválido ou não encontrado.")
+
+        hoje = datetime.today().date()
+
+        if data_nasc > hoje:
+            erros.append("Data de nascimento no futuro.")
+        else:
+            idade = hoje.year - data_nasc.year - (
+                (hoje.month, hoje.day) < (data_nasc.month, data_nasc.day)
+            )
+
+            if idade < 18:
+                erros.append("Usuário deve ser maior de idade.")
+
+        if erros:
+            return jsonify({"erros": erros}), 400
+
+        conn = conectar()
+        cursor = conn.cursor()
+
+        sql = """
+        UPDATE Usuario
+        SET nome=%s, email=%s, cpf=%s, cep=%s, data_nascimento=%s,
+            logradouro=%s, cidade=%s, estado=%s
+        WHERE ID_usuario=%s
+        """
+
+        cursor.execute(sql, (
+            nome,
+            email,
+            cpf,
+            cep,
+            data['data_nascimento'],
+            endereco['logradouro'],
+            endereco['cidade'],
+            endereco['estado'],
+            id
+        ))
+
+        conn.commit()
+
+        if cursor.rowcount == 0:
+            cursor.close()
+            conn.close()
+            return jsonify({"erro": "Usuário não encontrado"}), 404
+
+        cursor.close()
+        conn.close()
+
+        return jsonify({"mensagem": "Usuário atualizado com sucesso pelo admin!"})
+
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 500
+
 @app.route('/login', methods=['POST'])
 def login():
     data = request.json

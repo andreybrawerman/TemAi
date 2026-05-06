@@ -41,67 +41,87 @@
       <h1>Painel de Controle de Usuários</h1>
 
       <div class="grid-admin">
-        <section class="card">
-          <h2>Listar Usuários</h2>
-          <br>
-          <p>Visualize todos os clientes cadastrados.</p>
-          <br>
-          <button class="btn-principal" id="btnListar">Listar Todos</button>
-          <ul id="lista" class="lista-estilizada"></ul>
-        </section>
 
-        <section class="card">
-          <h2>Buscar Usuário</h2>
-          <div class="form-group">
-            <input id="buscar_id" type="number" placeholder="Digite o ID" />
-            <button class="btn-principal" id="btnBuscar">Buscar</button>
+        <!-- BLOCO 1: LISTA DE USUÁRIOS -->
+        <section class="card card-lista">
+          <div class="card-header">
+            <div>
+              <h2>Lista de Usuários</h2>
+              <p>Visualize os usuários cadastrados e gerencie as ações.</p>
+            </div>
+
+            <button class="btn-principal" id="btnListar">
+              Atualizar Lista
+            </button>
           </div>
-          <pre id="buscar_result" class="resultado-json"></pre>
+
+          <div class="barra-pesquisa">
+            <label for="pesquisaUsuario">Pesquisar usuário</label>
+            <input 
+              type="text" 
+              id="pesquisaUsuario" 
+              placeholder="Digite o nome ou email do usuário"
+            />
+          </div>
+
+          <div class="tabela-usuarios">
+            <div class="linha-usuario cabecalho-lista">
+              <span>ID</span>
+              <span>Nome</span>
+              <span>Email</span>
+              <span>Ações</span>
+            </div>
+
+            <div id="lista" class="lista-estilizada"></div>
+          </div>
         </section>
 
-        <section class="card">
+        <!-- BLOCO 2: ATUALIZAR DADOS -->
+        <section class="card card-form">
           <h2>Atualizar Dados</h2>
+          <p>Selecione um usuário na lista para editar as informações.</p>
+
           <div class="form-grid">
-            <input id="up_id" placeholder="ID do Usuário" class="full-width" />
-            <input id="up_nome" placeholder="Nome Completo" />
-            <input id="up_email" placeholder="E-mail" />
-            <input id="up_cpf" placeholder="CPF" />
-            <input id="up_cep" placeholder="CEP" />
-            <input id="up_data" type="date" />
-            
-            <div class="input-container">
-              <input id="nova_senha" type="password" placeholder="Nova Senha (opcional)" />
-              <button type="button" class="password-toggle" onclick="toggleSenha('nova_senha', 'eyeIcon2')">
-                  <img src="../../assets/img/olho.png" alt="Mostrar Senha" id="eyeIcon2">
-              </button>
+
+            <div class="campo full-width">
+              <label for="up_id">ID do Usuário</label>
+              <input id="up_id" placeholder="ID do usuário" readonly />
             </div>
-            <div class="input-container">
-              <input id="confirma_senha" type="password" placeholder="Confirmar Nova Senha" />
-              <button type="button" class="password-toggle" onclick="toggleSenha('confirma_senha', 'eyeIcon3')">
-                  <img src="../../assets/img/olho.png" alt="Mostrar Senha" id="eyeIcon3">
-              </button>
+
+            <div class="campo full-width">
+              <label for="up_nome">Nome completo</label>
+              <input id="up_nome" placeholder="Digite o nome completo" />
             </div>
-            <div class="input-container">
-              <input id="senha_atual" type="password" placeholder="Senha Atual (obrigatória)" autocomplete="new-password"/>
-              <button type="button" class="password-toggle" onclick="toggleSenha('senha_atual', 'eyeIcon1')">
-                  <img src="../../assets/img/olho.png" alt="Mostrar Senha" id="eyeIcon1">
-              </button>
+
+            <div class="campo full-width">
+              <label for="up_email">Email</label>
+              <input id="up_email" type="email" placeholder="Digite o email" />
             </div>
+
+            <div class="campo">
+              <label for="up_cpf">CPF</label>
+              <input id="up_cpf" placeholder="Digite o CPF" />
+            </div>
+
+            <div class="campo">
+              <label for="up_cep">CEP</label>
+              <input id="up_cep" placeholder="Digite o CEP" maxlength="8" />
+            </div>
+
+            <div class="campo full-width">
+              <label for="up_data">Data de nascimento</label>
+              <input id="up_data" type="date" />
+            </div>
+
           </div>
-          <button class="btn-principal" id="btnAtualizar">
+
+          <button class="btn-principal btn-salvar" id="btnAtualizar">
             Salvar Alterações
           </button>
+
           <p id="update_msg" class="feedback"></p>
         </section>
 
-        <section class="card card-perigo">
-          <h2>Excluir Conta</h2>
-          <div class="form-group">
-            <input id="del_id" placeholder="ID para Deletar" />
-            <button class="btn-deletar" id="btnDeletar">Deletar</button>
-          </div>
-          <p id="delete_msg" class="feedback"></p>
-        </section>
       </div>
     </main>
 
