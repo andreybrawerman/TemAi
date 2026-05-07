@@ -49,6 +49,20 @@ document.getElementById('cpf').addEventListener('input', function (e) {
   e.target.value = valor;
 });
 
+document.getElementById('cep').addEventListener('input', async e => {
+    let v = e.target.value.replace(/\D/g, '');
+    if (v.length === 8) {
+        const res = await fetch(`https://viacep.com.br/ws/${v}/json/`);
+        const d = await res.json();
+        if (!d.erro) {
+            document.getElementById('endereco').value = d.logradouro;
+            document.getElementById('cidade').value = d.localidade;
+            document.getElementById('estado').value = d.uf;
+            document.getElementById('numero').focus();
+        }
+    }
+});
+
 document
   .getElementById("formCadastro")
   .addEventListener("submit", async function (e) {
@@ -63,7 +77,12 @@ document
       email: document.getElementById("email").value,
       cpf: document.getElementById("cpf").value.replace(/\D/g, ""),
       data_nascimento: document.getElementById("data_nascimento").value,
-      cep: document.getElementById("cep").value,
+      cep: document.getElementById("cep").value.replace(/\D/g, ""),
+      endereco_da_tela: document.getElementById("endereco").value,
+      numero: document.getElementById("numero").value,
+      complemento: document.getElementById("complemento").value,
+      cidade: document.getElementById("cidade").value,
+      estado: document.getElementById("estado").value,
       senha: document.getElementById("senha").value,
       confirma_senha: document.getElementById("confirma_senha").value,
     };

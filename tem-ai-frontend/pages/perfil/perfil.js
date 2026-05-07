@@ -24,6 +24,31 @@ function toggleSenha(inputId, iconId) {
     }
 }
 
+document.getElementById('perfil_cep').addEventListener('input', async function (e) {
+    let valor = e.target.value.replace(/\D/g, ''); 
+    if (valor.length > 5) {
+        e.target.value = valor.replace(/^(\d{5})(\d)/, '$1-$2');
+    } else {
+        e.target.value = valor;
+    }
+
+    if (valor.length === 8) {
+        try {
+            const response = await fetch(`https://viacep.com.br/ws/${valor}/json/`);
+            const data = await response.json();
+
+            if (!data.erro) {
+                document.getElementById('perfil_endereco').value = data.logradouro;
+                document.getElementById('perfil_cidade').value = data.localidade;
+                document.getElementById('perfil_estado').value = data.uf;
+                document.getElementById('perfil_numero').focus();
+            }
+        } catch (error) {
+            console.error("Erro ao buscar CEP:", error);
+        }
+    }
+});
+
 async function carregarPerfil() {
     try {
         const response = await fetch(`${API_URL}/${idUsuario}`);
@@ -40,6 +65,14 @@ async function carregarPerfil() {
         document.getElementById("perfil_cpf").value = data.cpf || "";
         document.getElementById("perfil_cep").value = data.cep || "";
         document.getElementById("perfil_data").value = data.data_nascimento || "";
+        document.getElementById("perfil_endereco").value = data.logradouro || "";
+        document.getElementById("perfil_numero").value = data.numero || "";
+        document.getElementById("perfil_complemento").value = data.complemento || "";
+        document.getElementById("perfil_cidade").value = data.cidade || "";
+        document.getElementById("perfil_estado").value = data.estado || "";
+        document.getElementById("perfil_senha_atual").value = "";
+        document.getElementById("perfil_nova_senha").value = "";
+        document.getElementById("perfil_confirma_senha").value = "";
 
         if (data.foto_perfil) {
             document.getElementById("previewFoto").src = `http://localhost:5001/uploads/${data.foto_perfil}?t=${new Date().getTime()}`;
@@ -67,7 +100,12 @@ document.getElementById("btnSalvarPerfil").addEventListener("click", async () =>
         nome: document.getElementById("perfil_nome").value,
         email: document.getElementById("perfil_email").value,
         cpf: document.getElementById("perfil_cpf").value,
-        cep: document.getElementById("perfil_cep").value,
+        cep: document.getElementById("perfil_cep").value.replace(/\D/g, ""),
+        endereco_da_tela: document.getElementById("perfil_endereco").value,
+        numero: document.getElementById("perfil_numero").value,
+        complemento: document.getElementById("perfil_complemento").value,
+        cidade: document.getElementById("perfil_cidade").value,
+        estado: document.getElementById("perfil_estado").value,
         data_nascimento: document.getElementById("perfil_data").value,
         senha_atual: document.getElementById("perfil_senha_atual").value,
         nova_senha: document.getElementById("perfil_nova_senha").value,
