@@ -50,3 +50,27 @@ function controlarMenuAdmin() {
     }
   });
 }
+
+async function carregarFotoPerfil() {
+    const idUsuario = localStorage.getItem("id_usuario");
+
+    if (!idUsuario) return;
+
+    try {
+        const resposta = await fetch(`http://localhost:5001/usuarios/${idUsuario}`);
+        const usuario = await resposta.json();
+
+        const foto = document.getElementById("headerFotoPerfil");
+
+        if (!foto) return;
+
+        if (usuario.foto_perfil) {
+            foto.src = `http://localhost:5001/uploads/${usuario.foto_perfil}?t=${new Date().getTime()}`;
+        } else {
+            foto.src = "../../assets/img/perfil_padrao.png";
+        }
+
+    } catch (erro) {
+        console.error("Erro ao carregar foto:", erro);
+    }
+}

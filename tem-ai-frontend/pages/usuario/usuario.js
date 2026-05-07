@@ -316,3 +316,7 @@ hamburger.addEventListener("click", function () {
 });
 
 document.addEventListener("DOMContentLoaded", listarUsuarios);
+
+verificarLogin();
+controlarMenuAdmin();
+carregarFotoPerfil();

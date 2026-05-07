@@ -145,6 +145,8 @@ document.getElementById("btnSalvarPerfil").addEventListener("click", async () =>
                 msgBox.style.color = "#ff4d4d";
                 return;
             }
+
+            carregarFotoPerfil();
         }
 
         msgBox.innerText = "Perfil atualizado com sucesso!";
