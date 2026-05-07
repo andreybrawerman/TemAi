@@ -53,6 +53,28 @@ nav a.ativo {
   border-bottom: 2px solid var(--laranja);
 }
 
+header .headerUser{
+  font-size: 18px;
+  align-items: center;
+  display: flex;
+  margin-left: auto;
+}
+
+header .headerUser a{
+  color: rgb(234, 255, 245);
+  text-decoration: none;
+  display: flex;
+  border-radius: 50%;
+  font-weight: bold;
+}
+
+header .headerUser img{
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-inline: 15px;
+}
+
 footer {
   background-color: rgb(209, 130, 51);
   color: rgb(2, 47, 31);

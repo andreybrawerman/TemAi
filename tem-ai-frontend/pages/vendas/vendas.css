@@ -26,14 +26,6 @@ h2 {
   text-align: center;
 }
 
-section {
-  background: white;
-  padding: 20px;
-  margin-bottom: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
 #vitrine {
   display: flex;
   margin: 2%;
@@ -93,6 +85,10 @@ section {
   text-align: center;
   transition: 0.5s;
   margin: 2%;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .sacola-area:hover {
@@ -143,6 +139,10 @@ section {
   text-align: center;
   transition: 0.5s;
   margin: 2%;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .meus-pedidos:hover {
@@ -170,6 +170,11 @@ section {
   margin: 0 auto;
   margin-bottom: 5%;
   transition: 0.5s;
+  background-color: white;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .painel-adm:hover {
