@@ -43,7 +43,64 @@
         <input type="file" id="fotoPerfil" accept="image/*" hidden>
       </div>
 
-      
+        <div class="form-grid">
+
+    <div class="form-group">
+      <label for="perfil_nome">Nome Completo</label>
+      <input id="perfil_nome" type="text" placeholder="Ex: João Esperança">
+    </div>
+
+    <div class="form-group">
+      <label for="perfil_email">Email</label>
+      <input id="perfil_email" type="email" placeholder="Ex: joao@email.com">
+    </div>
+
+    <div class="form-group">
+      <label for="perfil_cpf">CPF</label>
+      <input id="perfil_cpf" type="text" placeholder="Ex: 123.456.789-00">
+    </div>
+
+    <div class="form-group">
+      <label for="perfil_cep">CEP</label>
+      <input id="perfil_cep" type="text" placeholder="Ex: 12345-678">
+    </div>
+
+    <div class="form-group">
+      <label for="perfil_data">Data de Nascimento</label>
+      <input id="perfil_data" type="date">
+    </div>
+
+    <div class="form-group full">
+      <label>Senha Atual</label>
+      <div class="input-container">
+        <input id="perfil_senha_atual" type="password" placeholder="Senha Atual (obrigatória)">
+        <button type="button" class="password-toggle" onclick="toggleSenha('perfil_senha_atual', 'eyePerfil1')">
+          <img src="../../assets/img/olho.png" id="eyePerfil1">
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Nova Senha</label>
+      <div class="input-container">
+        <input id="perfil_nova_senha" type="password" placeholder="Nova Senha">
+        <button type="button" class="password-toggle" onclick="toggleSenha('perfil_nova_senha', 'eyePerfil2')">
+          <img src="../../assets/img/olho.png" id="eyePerfil2">
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Confirmar Senha</label>
+      <div class="input-container">
+        <input id="perfil_confirma_senha" type="password" placeholder="Confirmar Nova Senha">
+        <button type="button" class="password-toggle" onclick="toggleSenha('perfil_confirma_senha', 'eyePerfil3')">
+          <img src="../../assets/img/olho.png" id="eyePerfil3">
+        </button>
+      </div>
+    </div>
+
+  </div>
 
       <button id="btnSalvarPerfil" class="btn-salvar">Salvar Alterações</button>
       <p id="perfil_msg" class="feedback"></p>
