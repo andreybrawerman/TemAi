@@ -61,13 +61,17 @@ async function carregarFotoPerfil() {
         const usuario = await resposta.json();
 
         const foto = document.getElementById("headerFotoPerfil");
+        if (foto) {
+            if (usuario.foto_perfil) {
+                foto.src = `http://localhost:5001/uploads/${usuario.foto_perfil}?t=${new Date().getTime()}`;
+            } else {
+                foto.src = "../../assets/img/perfil_padrao.png";
+            }
+        }
 
-        if (!foto) return;
-
-        if (usuario.foto_perfil) {
-            foto.src = `http://localhost:5001/uploads/${usuario.foto_perfil}?t=${new Date().getTime()}`;
-        } else {
-            foto.src = "../../assets/img/perfil_padrao.png";
+        const nomeEl = document.querySelector(".headerUser a:first-child");
+        if (nomeEl) {
+            nomeEl.textContent = usuario.nome || "Usuário";
         }
 
     } catch (erro) {
