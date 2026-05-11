@@ -12,7 +12,7 @@
   --verde-escuro: rgb(2, 47, 31);
 }
 
-/* Reset Global para todos os navegadores */
+/* Reset Global */
 * {
   margin: 0;
   padding: 0;
@@ -20,70 +20,119 @@
   font-family: Arial, Helvetica, sans-serif;
 }
 
-header {
+html,
+body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* ============================= */
+/* MENU GLOBAL */
+/* ============================= */
+
+.menu-principal {
+  width: 100%;
+  max-width: 100%;
+  min-height: 88px;
   display: flex;
   align-items: center;
-  background-color: rgb(2, 67, 44);
-  padding: 10px;
+  justify-content: space-between;
+  gap: 22px;
+  background-color: var(--verde-cabecalho);
+  padding: 12px 32px;
+  position: relative;
+  z-index: 1000;
 }
 
-header img {
-  width: 120px;
-  height: auto;
-  padding: 5px;
-  border-radius: 5px;
-}
-
-nav a {
-  margin: 20px;
+/* Logo */
+.logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
   text-decoration: none;
-  color: rgb(234, 255, 245);
+}
+
+.logo img {
+  width: 105px;
+  height: auto;
+  display: block;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* Menu desktop */
+.menu-principal nav {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.menu-principal nav a {
+  margin: 0;
+  text-decoration: none;
+  color: var(--verde-letras-cabecalho);
   transition: 0.3s;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 17px;
+  line-height: 1.1;
+  white-space: nowrap;
 }
 
-nav a:hover {
-  color: rgb(131, 156, 144);
-  transition: 0.3s;
+.menu-principal nav a:hover {
+  color: var(--verde-letras-hover);
 }
 
-nav a.ativo {
+.menu-principal nav a.ativo {
   color: var(--laranja);
   border-bottom: 2px solid var(--laranja);
 }
 
-header .headerUser{
-  font-size: 18px;
+/* Área do usuário */
+.menu-principal .headerUser {
+  display: flex;
   align-items: center;
-  display: flex;
-  margin-left: auto;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-shrink: 0;
+  min-width: 210px;
 }
 
-header .headerUser a{
-  color: rgb(234, 255, 245);
+.menu-principal .headerUser a {
+  color: var(--verde-letras-cabecalho);
   text-decoration: none;
-  display: flex;
-  border-radius: 50%;
   font-weight: bold;
+  font-size: 17px;
+  line-height: 1.1;
 }
 
-header .headerUser img{
-  width: 70px;
-  height: 70px;
+.nomeUsuario {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.fotoUsuarioLink {
+  flex-shrink: 0;
+}
+
+#headerFotoPerfil {
+  width: 58px;
+  height: 58px;
+  min-width: 58px;
   border-radius: 50%;
-  margin-inline: 15px;
+  object-fit: cover;
+  background-color: white;
+  display: block;
+  margin: 0;
+  padding: 0;
 }
 
-footer {
-  background-color: rgb(209, 130, 51);
-  color: rgb(2, 47, 31);
-  text-align: center;
-  font-size: large;
-  font-weight: bold;
-  padding: 2%;
-}
-
+/* Hambúrguer */
 .hamburger {
   display: none;
   flex-direction: column;
@@ -92,59 +141,171 @@ footer {
   border: none;
   cursor: pointer;
   padding: 8px;
+  flex-shrink: 0;
 }
 
 .hamburger span {
   display: block;
-  width: 26px;
-  height: 2px;
-  background-color: rgb(209, 130, 51);
-  border-radius: 2px;
+  width: 28px;
+  height: 3px;
+  background-color: var(--laranja);
+  border-radius: 3px;
   transition: 0.3s;
 }
 
-/* Animação do X quando ativo */
 .hamburger.ativo span:nth-child(1) {
-  transform: translateY(7px) rotate(45deg);
+  transform: translateY(8px) rotate(45deg);
 }
+
 .hamburger.ativo span:nth-child(2) {
   opacity: 0;
 }
+
 .hamburger.ativo span:nth-child(3) {
-  transform: translateY(-7px) rotate(-45deg);
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* ============================= */
+/* FOOTER */
+/* ============================= */
+
+footer {
+  background-color: var(--laranja);
+  color: var(--verde-escuro);
+  text-align: center;
+  font-size: large;
+  font-weight: bold;
+  padding: 2%;
+}
+
+/* ============================= */
+/* RESPONSIVO */
+/* ============================= */
+
+@media (max-width: 1200px) {
+  .menu-principal {
+    gap: 14px;
+    padding: 12px 22px;
+  }
+
+  .menu-principal nav {
+    gap: 16px;
+  }
+
+  .menu-principal nav a {
+    font-size: 16px;
+  }
+
+  .menu-principal .headerUser {
+    min-width: 160px;
+  }
+
+  .nomeUsuario {
+    max-width: 105px;
+  }
+
+  #headerFotoPerfil {
+    width: 54px;
+    height: 54px;
+    min-width: 54px;
+  }
 }
 
 @media (max-width: 1080px) {
-  header {
+  .menu-principal {
+    min-height: 78px;
+    padding: 12px 20px;
     justify-content: space-between;
   }
 
   .hamburger {
     display: flex;
+    order: 1;
   }
 
-  header nav {
+  .logo {
+    order: 2;
+  }
+
+  .logo img {
+    width: 90px;
+  }
+
+  .menu-principal .headerUser {
+    order: 3;
+    min-width: auto;
+  }
+
+  .nomeUsuario {
+    display: none;
+  }
+
+  #headerFotoPerfil {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+  }
+
+  .menu-principal nav {
+    order: 4;
     display: none;
     flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
     position: absolute;
-    top: 64px;
+    top: 100%;
     left: 0;
     width: 100%;
-    background-color: rgb(14, 90, 64);
-    padding: 16px 0;
+    background-color: var(--verde-fundo);
+    padding: 10px 0;
     z-index: 999;
+    gap: 0;
   }
 
-  header nav.aberto {
+  .menu-principal nav.aberto {
     display: flex;
   }
 
-  header nav a {
-    padding: 12px 24px;
-    border-bottom: 1px solid rgba(209, 130, 51, 0.2);
+  .menu-principal nav a {
+    width: 100%;
+    padding: 14px 24px;
+    border-bottom: 1px solid rgba(209, 130, 51, 0.25);
+    font-size: 17px;
+    white-space: nowrap;
   }
 
-  header nav a:last-child {
+  .menu-principal nav a:last-child {
     border-bottom: none;
+  }
+
+  .menu-principal nav a.ativo {
+    color: var(--laranja);
+    border-bottom: 1px solid rgba(209, 130, 51, 0.25);
+  }
+}
+
+@media (max-width: 480px) {
+  .menu-principal {
+    min-height: 70px;
+    padding: 10px 14px;
+  }
+
+  .logo img {
+    width: 82px;
+  }
+
+  #headerFotoPerfil {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+  }
+
+  .hamburger span {
+    width: 24px;
+  }
+
+  .menu-principal nav a {
+    font-size: 16px;
+    padding: 13px 20px;
   }
 }

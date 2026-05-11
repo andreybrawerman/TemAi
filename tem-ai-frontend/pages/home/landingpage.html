@@ -10,30 +10,8 @@
   </head>
 
   <body>
-    <header>
-      <button class="hamburger" id="hamburger" aria-label="Abrir menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-      <a href="landingpage.html" class="logo">
-        <img src="../../assets/img/logo_temai.png" alt="Logo Temai" />
-      </a>
-
-      <nav>
-        <a href="../home/landingpage.html" class="ativo">Página Inicial</a>
-        <a href="../login/login.html">Entrar</a>
-        <a href="../cadastro/cadastro.html">Cadastrar</a>
-    </nav>
-      
-    <section class="headerUser">
-      <a href="../perfil/perfil.html">Usuário Desconectado</a>
-      <a href="../perfil/perfil.html">
-        <img src="../../assets/img/perfil_padrao.png" alt="Foto Usuário" id="headerFotoPerfil">
-      </a>
-    </section>
-
-    </header>
+    
+    {% include "includes/menu.html" %}
 
     <main>
       <section class="sec1">

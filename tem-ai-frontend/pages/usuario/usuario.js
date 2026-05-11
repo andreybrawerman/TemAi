@@ -307,14 +307,6 @@ document.getElementById("pesquisaUsuario").addEventListener("input", () => {
   renderizarUsuarios(usuariosFiltrados);
 });
 
-const hamburger = document.getElementById("hamburger");
-const nav = document.querySelector("nav");
-
-hamburger.addEventListener("click", function () {
-  nav.classList.toggle("aberto");
-  hamburger.classList.toggle("ativo");
-});
-
 document.addEventListener("DOMContentLoaded", listarUsuarios);
 
 verificarLogin();

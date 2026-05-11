@@ -9,36 +9,8 @@
   <link rel="icon" type="image/png" href="../../assets/img/logo_carrinho_redondo.png">
 </head>
 <body>
-  <header>
-    <button class="hamburger" id="hamburger" aria-label="Abrir menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
 
-    <a href="../home/landingpage.html" class="logo">
-      <img src="../../assets/img/logo_temai.png" alt="Logo Temai" />
-    </a>
-
-    <nav>
-      <a href="../home/landingpage.html">Página Inicial</a>
-      <a href="../vendas/testar_vendas.html">Área de Compras</a>
-
-      <a href="../estoque/estoque.html" class="admin-only">Estoque (ADM)</a>
-      <a href="../usuario/usuario.html" class="admin-only">Usuários (ADM)</a>
-      <a href="../vendas/painel_vendas.html" class="admin-only">Vendas (ADM)</a>
-
-      <a href="perfil.html" class="ativo">Perfil</a>
-      <a href="#" onclick="logout()">Sair</a>
-    </nav>
-
-    <section class="headerUser">
-      <a href="../perfil/perfil.html">Usuário Desconectado</a>
-      <a href="../perfil/perfil.html">
-        <img src="../../assets/img/perfil_padrao.png" alt="Foto Usuário" id="headerFotoPerfil">
-      </a>
-    </section>
-  </header>
+    {% include "includes/menu.html" %}
 
   <main class="perfil-container">
     <section class="perfil-card">
