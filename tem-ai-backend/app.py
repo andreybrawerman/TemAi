@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template, session, redirect, send_from_directory
 from flask_cors import CORS
 import mysql.connector 
 from datetime import datetime
@@ -10,10 +10,18 @@ import os
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
 
-app = Flask(__name__)
-CORS(app)
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+
+FRONTEND_DIR = os.path.abspath(os.path.join(BASE_DIR, '..', 'tem-ai-frontend'))
+PAGES_DIR = os.path.join(FRONTEND_DIR, 'pages')
+ASSETS_DIR = os.path.join(FRONTEND_DIR, 'assets')
+
+app = Flask(__name__, template_folder=PAGES_DIR)
+app.secret_key = "chave_temporaria_temai"
+
+CORS(app)
+
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
 
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -26,6 +34,53 @@ def conectar():
         password="12345678",
         database="tem_ai"
     )
+
+def contexto_menu(pagina_ativa):
+    return {
+        "pagina_ativa": pagina_ativa,
+        "usuario_logado": session.get("id_usuario") is not None,
+        "nome_usuario": session.get("nome"),
+        "tipo_usuario": session.get("tipo"),
+        "foto_perfil": session.get("foto_perfil")
+    }
+
+
+@app.route('/assets/<path:filename>')
+def servir_assets(filename):
+    return send_from_directory(ASSETS_DIR, filename)
+
+
+@app.route('/')
+def abrir_raiz():
+    return redirect('/pages/home/landingpage.html')
+
+@app.route('/pages/<pasta>/<arquivo>')
+def abrir_pagina(pasta, arquivo):
+    paginas_ativas = {
+        "landingpage.html": "home",
+        "login.html": "login",
+        "cadastro.html": "cadastro",
+        "perfil.html": "perfil",
+        "estoque.html": "estoque",
+        "usuario.html": "usuario",
+        "testar_vendas.html": "compras",
+        "painel_vendas.html": "vendas_admin"
+    }
+
+    if arquivo.endswith(".html"):
+        pagina_ativa = paginas_ativas.get(arquivo, "")
+        return render_template(
+            f"{pasta}/{arquivo}",
+            **contexto_menu(pagina_ativa)
+        )
+
+    return send_from_directory(os.path.join(PAGES_DIR, pasta), arquivo)
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/pages/login/login.html')
 
 @app.route('/usuarios', methods=['POST'])
 def cadastrar_usuario():
@@ -421,6 +476,10 @@ def login():
 
         if usuario:
             if check_password_hash(usuario['senha'], senha_digitada):
+                session["id_usuario"] = usuario["ID_usuario"]
+                session["nome"] = usuario["nome"]
+                session["tipo"] = usuario["tipo"]
+
                 return jsonify({
                     "mensagem": "Login realizado com sucesso!",
                     "id_usuario": usuario['ID_usuario'],

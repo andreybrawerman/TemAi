@@ -1,0 +1,81 @@
+<header class="menu-principal">
+  <button class="hamburger" id="hamburger" aria-label="Abrir menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <a href="../home/landingpage.html" class="logo">
+    <img src="../../assets/img/logo_temai.png" alt="Logo Temai" />
+  </a>
+
+  <nav id="menuNav">
+    <a href="../home/landingpage.html" class="{{ 'ativo' if pagina_ativa == 'home' else '' }}">
+      Página Inicial
+    </a>
+
+    {% if usuario_logado %}
+      <a href="../vendas/testar_vendas.html" class="{{ 'ativo' if pagina_ativa == 'compras' else '' }}">
+        Área de Compras
+      </a>
+
+      {% if tipo_usuario == 'admin' %}
+        <a href="../estoque/estoque.html" class="{{ 'ativo' if pagina_ativa == 'estoque' else '' }}">
+          Estoque (ADM)
+        </a>
+
+        <a href="../usuario/usuario.html" class="{{ 'ativo' if pagina_ativa == 'usuario' else '' }}">
+          Usuários (ADM)
+        </a>
+
+        <a href="../vendas/painel_vendas.html" class="{{ 'ativo' if pagina_ativa == 'vendas_admin' else '' }}">
+          Vendas (ADM)
+        </a>
+      {% endif %}
+
+      <a href="../perfil/perfil.html" class="{{ 'ativo' if pagina_ativa == 'perfil' else '' }}">
+        Perfil
+      </a>
+
+      <a href="/logout" onclick="localStorage.clear()">Sair</a>
+    {% else %}
+      <a href="../login/login.html" class="{{ 'ativo' if pagina_ativa == 'login' else '' }}">
+        Entrar
+      </a>
+
+      <a href="../cadastro/cadastro.html" class="{{ 'ativo' if pagina_ativa == 'cadastro' else '' }}">
+        Cadastrar
+      </a>
+    {% endif %}
+  </nav>
+
+  <section class="headerUser">
+    {% if usuario_logado %}
+      <a href="../perfil/perfil.html" class="nomeUsuario">{{ nome_usuario }}</a>
+    {% else %}
+      <a href="../login/login.html" class="nomeUsuario">Usuário Desconectado</a>
+    {% endif %}
+
+    <a href="../perfil/perfil.html" class="fotoUsuarioLink">
+      {% if foto_perfil %}
+        <img src="/uploads/{{ foto_perfil }}" alt="Foto Usuário" id="headerFotoPerfil">
+      {% else %}
+        <img src="../../assets/img/perfil_padrao.png" alt="Foto Usuário" id="headerFotoPerfil">
+      {% endif %}
+    </a>
+  </section>
+</header>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const hamburger = document.getElementById("hamburger");
+    const nav = document.getElementById("menuNav");
+
+    if (hamburger && nav) {
+      hamburger.addEventListener("click", function () {
+        nav.classList.toggle("aberto");
+        hamburger.classList.toggle("ativo");
+      });
+    }
+  });
+</script>

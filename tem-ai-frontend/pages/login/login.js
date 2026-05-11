@@ -54,14 +54,6 @@ document
     }
   });
 
-const hamburger = document.getElementById("hamburger");
-const nav = document.querySelector("nav");
-
-hamburger.addEventListener("click", function () {
-  nav.classList.toggle("aberto");
-  hamburger.classList.toggle("ativo");
-});
-
 verificarLogin();
 controlarMenuAdmin();
 carregarFotoPerfil();

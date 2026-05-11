@@ -165,12 +165,3 @@ document.getElementById("btnSalvarPerfil").addEventListener("click", async () =>
 
 carregarPerfil();
 
-const hamburger = document.getElementById("hamburger");
-const nav = document.querySelector("nav");
-
-if (hamburger && nav) {
-    hamburger.addEventListener("click", function () {
-        nav.classList.toggle("aberto");
-        hamburger.classList.toggle("ativo");
-    });
-}
