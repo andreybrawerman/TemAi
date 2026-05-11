@@ -1,0 +1,641 @@
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import mysql.connector 
+from datetime import datetime
+from api_handler import buscar_endereco_por_cep
+from validacoes import validar_usuario, validar_email, validar_cpf
+import re
+from werkzeug.security import generate_password_hash, check_password_hash
+import os
+from werkzeug.utils import secure_filename
+from flask import send_from_directory
+
+app = Flask(__name__)
+CORS(app)
+
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def conectar():
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="12345678",
+        database="tem_ai"
+    )
+
+@app.route('/usuarios', methods=['POST'])
+def cadastrar_usuario():
+    data = request.json
+    try:
+        nome = data['nome']
+        email = data['email']
+        senha = data['senha']
+        confirma_senha = data['confirma_senha']
+        data_nasc_str = data['data_nascimento']
+        cep = data['cep']
+        cpf = data['cpf']
+        numero = data.get('numero', '')
+        complemento = data.get('complemento', '')
+
+        data_nasc = datetime.strptime(data_nasc_str, "%Y-%m-%d").date()
+
+        erros = validar_usuario(nome, data_nasc, senha, confirma_senha, cpf, email)
+        if erros:
+            return jsonify({"erros": erros}), 400
+        
+        senha_hash = generate_password_hash(senha)
+
+        endereco = buscar_endereco_por_cep(cep)
+        if not endereco:
+            return jsonify({"erro": "CEP inválido"}), 400
+
+        conn = conectar()
+        cursor = conn.cursor()
+
+        sql = """
+        INSERT INTO Usuario 
+        (nome, email, senha, data_nascimento, cpf, cep, logradouro, numero, complemento, cidade, estado) 
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """
+
+        cursor.execute(sql, (
+            nome, email, senha_hash, data_nasc_str, cpf, cep,
+            endereco['logradouro'], numero, complemento, endereco['cidade'], endereco['estado']
+        ))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return jsonify({"mensagem": "Usuário cadastrado com sucesso!"})
+
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 500
+
+@app.route('/usuarios', methods=['GET'])
+def listar_usuarios():
+    conn = conectar()
+    cursor = conn.cursor()
+    cursor.execute("SELECT ID_usuario, nome, email FROM Usuario")
+    usuarios = cursor.fetchall()
+
+    lista = [{"id": u[0], "nome": u[1], "email": u[2]} for u in usuarios]
+    
+    cursor.close()
+    conn.close()
+    return jsonify(lista)
+
+@app.route('/usuarios/<int:id>', methods=['GET'])
+def buscar_usuario(id):
+    conn = conectar()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT ID_usuario, nome, email, cpf, cep, logradouro, numero, complemento, cidade, estado, data_nascimento, foto_perfil
+        FROM Usuario
+        WHERE ID_usuario = %s
+    """, (id,))
+    usuario = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    if usuario:
+        if usuario["data_nascimento"]:
+            usuario["data_nascimento"] = usuario["data_nascimento"].strftime("%Y-%m-%d")
+        return jsonify(usuario)
+    else:
+        return jsonify({"erro": "Usuário não encontrado"}), 404
+    
+@app.route('/uploads/<path:filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+@app.route('/usuarios/<int:id>/foto', methods=['POST'])
+def upload_foto_perfil(id):
+    try:
+        if 'foto' not in request.files:
+            return jsonify({"erro": "Nenhuma imagem enviada."}), 400
+
+        arquivo = request.files['foto']
+
+        if arquivo.filename == '':
+            return jsonify({"erro": "Arquivo inválido."}), 400
+
+        extensoes_permitidas = {'png', 'jpg', 'jpeg', 'gif'}
+        extensao = arquivo.filename.rsplit('.', 1)[1].lower() if '.' in arquivo.filename else ''
+
+        if extensao not in extensoes_permitidas:
+            return jsonify({"erro": "Formato de imagem não permitido."}), 400
+
+        nome_seguro = secure_filename(f"perfil_{id}.{extensao}")
+        caminho_arquivo = os.path.join(app.config['UPLOAD_FOLDER'], nome_seguro)
+        arquivo.save(caminho_arquivo)
+
+        conn = conectar()
+        cursor = conn.cursor()
+
+        cursor.execute(
+            "UPDATE Usuario SET foto_perfil = %s WHERE ID_usuario = %s",
+            (nome_seguro, id)
+        )
+        conn.commit()
+
+        cursor.close()
+        conn.close()
+
+        return jsonify({
+            "mensagem": "Foto de perfil atualizada com sucesso!",
+            "foto_perfil": nome_seguro
+        })
+
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 500
+    
+@app.route('/usuarios/<int:id>', methods=['PUT'])
+def atualizar_usuario(id):
+    data = request.json
+
+    try:
+        nome = data['nome']
+        email = data['email']
+        cpf = data['cpf']
+        cep = data['cep']
+        data_nasc = datetime.strptime(data['data_nascimento'], "%Y-%m-%d").date()
+        logradouro = data.get('endereco_da_tela')
+        numero = data.get('numero')
+        complemento = data.get('complemento')
+        cidade = data.get('cidade')
+        estado = data.get('estado')
+
+        senha_atual = data.get('senha_atual')
+        nova_senha = data.get('nova_senha')
+        confirma_senha = data.get('confirma_senha')
+
+        if not senha_atual:
+            return jsonify({"erro": "Informe a senha atual para confirmar a alteração."}), 400
+
+        conn = conectar()
+        cursor = conn.cursor(dictionary=True)
+
+        cursor.execute("SELECT senha FROM Usuario WHERE ID_usuario = %s", (id,))
+        usuario = cursor.fetchone()
+
+        if not usuario:
+            cursor.close()
+            conn.close()
+            return jsonify({"erro": "Usuário não encontrado"}), 404
+
+        if not check_password_hash(usuario['senha'], senha_atual):
+            cursor.close()
+            conn.close()
+            return jsonify({"erro": "Senha atual incorreta."}), 401
+
+        erros = []
+
+        if not nome or len(nome.strip()) < 5:
+            erros.append("Nome deve ter pelo menos 5 caracteres.")
+
+        if not validar_email(email):
+            erros.append("E-mail inválido.")
+
+        if not validar_cpf(cpf):
+            erros.append("CPF inválido.")
+
+        endereco = buscar_endereco_por_cep(cep)
+        if not endereco:
+            erros.append("CEP inválido ou não encontrado.")
+
+        hoje = datetime.today().date()
+        if data_nasc > hoje:
+            erros.append("Data de nascimento no futuro.")
+        else:
+            idade = hoje.year - data_nasc.year - ((hoje.month, hoje.day) < (data_nasc.month, data_nasc.day))
+            if idade < 18:
+                erros.append("Usuário deve ser maior de idade.")
+
+        if nova_senha:
+            if nova_senha != confirma_senha:
+                erros.append("As senhas não coincidem.")
+            elif not re.match(r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$', nova_senha):
+                erros.append("A senha deve ter no mínimo 8 caracteres, incluindo letras maiúsculas, minúsculas e números.")
+
+        if erros:
+            cursor.close()
+            conn.close()
+            return jsonify({"erros": erros}), 400
+
+        if nova_senha:
+            senha_hash = generate_password_hash(nova_senha)
+            sql = """
+            UPDATE Usuario
+            SET nome=%s, email=%s, cpf=%s, cep=%s, data_nascimento=%s, logradouro=%s, numero=%s, complemento=%s, cidade=%s, estado=%s, senha=%s
+            WHERE ID_usuario=%s
+            """
+            cursor.execute(sql, (nome, email, cpf, cep, data['data_nascimento'], logradouro, numero, complemento, cidade, estado, senha_hash, id))
+        else:
+            sql = """
+            UPDATE Usuario
+            SET nome=%s, email=%s, cpf=%s, cep=%s, data_nascimento=%s, logradouro=%s, numero=%s, complemento=%s, cidade=%s, estado=%s
+            WHERE ID_usuario=%s
+            """
+            cursor.execute(sql, (nome, email, cpf, cep, data['data_nascimento'], logradouro, numero, complemento, cidade, estado, id))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return jsonify({"mensagem": "Usuário atualizado com sucesso!"})
+
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 500
+
+@app.route('/usuarios/<int:id>', methods=['DELETE'])
+def deletar_usuario(id):
+    conn = conectar()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM Usuario WHERE ID_usuario = %s", (id,))
+    conn.commit()
+
+    if cursor.rowcount == 0:
+        cursor.close()
+        conn.close()
+        return jsonify({"erro": "Usuário não encontrado"}), 404
+
+    cursor.close()
+    conn.close()
+
+    return jsonify({"mensagem": "Usuário deletado com sucesso!"})
+
+@app.route('/usuarios/<int:id>/tornar-admin', methods=['PUT'])
+def tornar_admin(id):
+    data = request.json
+    id_admin_logado = data.get("id_admin_logado")
+
+    if not id_admin_logado:
+        return jsonify({"erro": "Admin logado não informado."}), 400
+
+    try:
+        conn = conectar()
+        cursor = conn.cursor(dictionary=True)
+
+        cursor.execute(
+            "SELECT tipo FROM Usuario WHERE ID_usuario = %s",
+            (id_admin_logado,)
+        )
+
+        admin = cursor.fetchone()
+
+        if not admin:
+            cursor.close()
+            conn.close()
+            return jsonify({"erro": "Administrador não encontrado."}), 404
+
+        if admin["tipo"] != "admin":
+            cursor.close()
+            conn.close()
+            return jsonify({"erro": "Apenas administradores podem tornar outro usuário admin."}), 403
+
+        cursor.execute(
+            "UPDATE Usuario SET tipo = %s WHERE ID_usuario = %s",
+            ("admin", id)
+        )
+
+        conn.commit()
+
+        if cursor.rowcount == 0:
+            cursor.close()
+            conn.close()
+            return jsonify({"erro": "Usuário não encontrado"}), 404
+
+        cursor.close()
+        conn.close()
+
+        return jsonify({"mensagem": "Usuário promovido a administrador com sucesso!"})
+
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 500
+    
+@app.route('/admin/usuarios/<int:id>', methods=['PUT'])
+def admin_atualizar_usuario(id):
+    data = request.json
+
+    try:
+        nome = data['nome']
+        email = data['email']
+        cpf = data['cpf']
+        cep = data['cep']
+        data_nasc = datetime.strptime(data['data_nascimento'], "%Y-%m-%d").date()
+
+        erros = []
+
+        if not nome or len(nome.strip()) < 5:
+            erros.append("Nome deve ter pelo menos 5 caracteres.")
+
+        if not validar_email(email):
+            erros.append("E-mail inválido.")
+
+        if not validar_cpf(cpf):
+            erros.append("CPF inválido.")
+
+        endereco = buscar_endereco_por_cep(cep)
+        if not endereco:
+            erros.append("CEP inválido ou não encontrado.")
+
+        hoje = datetime.today().date()
+
+        if data_nasc > hoje:
+            erros.append("Data de nascimento no futuro.")
+        else:
+            idade = hoje.year - data_nasc.year - (
+                (hoje.month, hoje.day) < (data_nasc.month, data_nasc.day)
+            )
+
+            if idade < 18:
+                erros.append("Usuário deve ser maior de idade.")
+
+        if erros:
+            return jsonify({"erros": erros}), 400
+
+        conn = conectar()
+        cursor = conn.cursor()
+
+        sql = """
+        UPDATE Usuario
+        SET nome=%s, email=%s, cpf=%s, cep=%s, data_nascimento=%s,
+            logradouro=%s, cidade=%s, estado=%s
+        WHERE ID_usuario=%s
+        """
+
+        cursor.execute(sql, (
+            nome,
+            email,
+            cpf,
+            cep,
+            data['data_nascimento'],
+            endereco['logradouro'],
+            endereco['cidade'],
+            endereco['estado'],
+            id
+        ))
+
+        conn.commit()
+
+        if cursor.rowcount == 0:
+            cursor.close()
+            conn.close()
+            return jsonify({"erro": "Usuário não encontrado"}), 404
+
+        cursor.close()
+        conn.close()
+
+        return jsonify({"mensagem": "Usuário atualizado com sucesso pelo admin!"})
+
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 500
+
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.json
+    email = data.get('email')
+    senha_digitada = data.get('senha')
+
+    if not email or not senha_digitada:
+        return jsonify({"erro": "E-mail e senha são obrigatórios"}), 400
+
+    try:
+        conn = conectar()
+        cursor = conn.cursor(dictionary=True, buffered=True) 
+        
+        sql = "SELECT ID_usuario, nome, senha, tipo FROM Usuario WHERE email = %s"
+        cursor.execute(sql, (email,))
+        usuario = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        if usuario:
+            if check_password_hash(usuario['senha'], senha_digitada):
+                return jsonify({
+                    "mensagem": "Login realizado com sucesso!",
+                    "id_usuario": usuario['ID_usuario'],
+                    "nome": usuario['nome'],
+                    "tipo": usuario['tipo']
+                }), 200
+            else:
+                return jsonify({"erro": "Senha incorreta"}), 401
+        else:
+            return jsonify({"erro": "Usuário não encontrado"}), 404
+
+    except Exception as e:
+        return jsonify({"erro": f"Erro no servidor: {str(e)}"}), 500
+
+@app.route('/produtos', methods=['POST'])
+def criar_produto():
+    data = request.json
+
+    nome = data['nome'].strip().upper()
+    preco = data['preco']
+    estoque = data['estoque']
+
+    conn = conectar()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT ID_produto FROM Produto WHERE nome = %s", (nome,))
+    produto_existente = cursor.fetchone()
+
+    if produto_existente:
+        id_existente = produto_existente[0]
+        cursor.close()
+        conn.close()
+        return jsonify({
+            "erro": "Produto já existe.",
+            "id_existente": id_existente
+        }), 400
+
+    sql = "INSERT INTO Produto (nome, preco, estoque_atual) VALUES (%s, %s, %s)"
+    cursor.execute(sql, (nome, preco, estoque))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return jsonify({"mensagem":"Produto criado com sucesso"})
+
+@app.route('/produtos', methods=['GET'])
+def listar_produtos():
+    conn = conectar()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM Produto")
+    produtos = cursor.fetchall()
+
+    lista = []
+    for p in produtos:
+        lista.append({
+            "id": p[0],
+            "nome": p[1],
+            "preco": float(p[2]),
+            "estoque": p[3]
+        })
+
+    cursor.close()
+    conn.close()
+
+    return jsonify(lista)
+
+@app.route('/produtos/<int:id>', methods=['PUT'])
+def atualizar_produto(id):
+    data = request.json
+
+    nome = data['nome']
+    preco = data['preco']
+    estoque = data['estoque']
+
+    conn = conectar()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT ID_produto FROM Produto WHERE nome = %s AND ID_produto <> %s",
+        (nome, id)
+    )
+    produto_existente = cursor.fetchone()
+
+    if produto_existente:
+        id_existente = produto_existente[0]
+        cursor.close()
+        conn.close()
+        return jsonify({
+            "erro": "Produto já existe.",
+            "id_existente": id_existente
+        }), 400
+
+    sql = "UPDATE Produto SET nome=%s, preco=%s, estoque_atual=%s WHERE ID_produto=%s"
+    cursor.execute(sql, (nome, preco, estoque, id))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return jsonify({"mensagem": "Produto atualizado"})
+
+@app.route('/produtos/<int:id>', methods=['DELETE'])
+def deletar_produto(id):
+    conn = conectar()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM Produto WHERE ID_produto=%s", (id,))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    return jsonify({"mensagem": "Produto deletado"})
+
+@app.route('/pedidos', methods=['POST'])
+def finalizar_venda():
+    data = request.json
+    try:
+        id_usuario = data['id_usuario']
+        itens = data['itens'] 
+        valor_total = data['valor_total']
+        conn = conectar()
+        cursor = conn.cursor()
+        
+        sql_pedido = "INSERT INTO Pedido (data_hora, status, valor_total, fk_Usuario_ID_usuario) VALUES (%s, %s, %s, %s)"
+        cursor.execute(sql_pedido, (datetime.now(), "Pendente", valor_total, id_usuario))
+        id_pedido = cursor.lastrowid
+        
+        sql_itens = "INSERT INTO pedido_produto (fk_Pedido_ID_pedido, fk_Produto_ID_produto, quantidade) VALUES (%s, %s, %s)"
+        for item in itens:
+            cursor.execute(sql_itens, (id_pedido, item['id_produto'], item['quantidade']))
+            cursor.execute("UPDATE Produto SET estoque_atual = estoque_atual - %s WHERE ID_produto = %s", 
+                           (item['quantidade'], item['id_produto']))
+
+        conn.commit()
+        return jsonify({"mensagem": "Venda finalizada!", "id_pedido": id_pedido}), 201
+    except Exception as e:
+        if 'conn' in locals(): conn.rollback()
+        return jsonify({"erro": str(e)}), 500
+    finally:
+        if 'cursor' in locals(): cursor.close()
+        if 'conn' in locals(): conn.close()
+
+@app.route('/admin/pedidos', methods=['GET'])
+def historico_geral():
+    conn = conectar()
+    cursor = conn.cursor()
+    sql = """
+    SELECT p.ID_pedido, p.data_hora, p.status, p.valor_total, u.nome 
+    FROM Pedido p
+    JOIN Usuario u ON p.fk_Usuario_ID_usuario = u.ID_usuario
+    ORDER BY p.data_hora DESC
+    """
+    cursor.execute(sql)
+    pedidos = cursor.fetchall()
+    lista = [{"id": p[0], "data": p[1].strftime("%d/%m/%Y %H:%M"), "status": p[2], "total": float(p[3]), "cliente": p[4]} for p in pedidos]
+    cursor.close()
+    conn.close()
+    return jsonify(lista)
+
+@app.route('/usuarios/<int:id_usuario>/pedidos', methods=['GET'])
+def historico_usuario(id_usuario):
+    conn = conectar()
+    cursor = conn.cursor()
+    sql = "SELECT ID_pedido, data_hora, status, valor_total FROM Pedido WHERE fk_Usuario_ID_usuario = %s"
+    cursor.execute(sql, (id_usuario,))
+    pedidos = cursor.fetchall()
+    lista = [{"id": p[0], "data": p[1].strftime("%d/%m/%Y %H:%M"), "status": p[2], "total": float(p[3])} for p in pedidos]
+    cursor.close()
+    conn.close()
+    return jsonify(lista)
+
+@app.route('/pedidos/<int:id_pedido>/itens', methods=['GET'])
+def listar_itens_pedido(id_pedido):
+    conn = conectar()
+    cursor = conn.cursor()
+    sql = """
+    SELECT pr.nome, pp.quantidade, pr.preco
+    FROM pedido_produto pp
+    JOIN Produto pr ON pp.fk_Produto_ID_produto = pr.ID_produto
+    WHERE pp.fk_Pedido_ID_pedido = %s
+    """
+    cursor.execute(sql, (id_pedido,))
+    itens = cursor.fetchall()
+    lista = [{"produto": i[0], "quantidade": i[1], "subtotal": float(i[2] * i[1])} for i in itens]
+    cursor.close()
+    conn.close()
+    return jsonify(lista)
+
+@app.route('/pedidos/<int:id_pedido>/status', methods=['PUT'])
+def atualizar_status_pedido(id_pedido):
+    data = request.json
+    novo_status = data['status']
+
+    try:
+        conn = conectar()
+        cursor = conn.cursor()
+
+        sql = "UPDATE Pedido SET status = %s WHERE ID_pedido = %s"
+        cursor.execute(sql, (novo_status, id_pedido))
+
+        conn.commit()
+
+        return jsonify({"mensagem": "Status do pedido atualizado!"})
+
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 500
+
+    finally:
+        cursor.close()
+        conn.close()
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5001)
+
+
