@@ -23,7 +23,7 @@ def conectar():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="lucaS1712",
+        password="12345678",
         database="tem_ai"
     )
 
