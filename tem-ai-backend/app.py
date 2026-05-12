@@ -9,6 +9,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
+from datetime import timedelta
 
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -19,6 +20,12 @@ ASSETS_DIR = os.path.join(FRONTEND_DIR, 'assets')
 
 app = Flask(__name__, template_folder=PAGES_DIR)
 app.secret_key = "chave_temporaria_temai"
+
+app.config['SESSION_COOKIE_NAME'] = 'temai_session'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=1)
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SECURE'] = False  # True quando for pra produção com HTTPS
 
 CORS(app)
 
@@ -479,6 +486,7 @@ def login():
                 session["id_usuario"] = usuario["ID_usuario"]
                 session["nome"] = usuario["nome"]
                 session["tipo"] = usuario["tipo"]
+                session.permanent = True
 
                 return jsonify({
                     "mensagem": "Login realizado com sucesso!",
