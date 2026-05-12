@@ -25,7 +25,7 @@ app.config['SESSION_COOKIE_NAME'] = 'temai_session'
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=1)
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config['SESSION_COOKIE_HTTPONLY'] = True
-app.config['SESSION_COOKIE_SECURE'] = False  # True quando for pra produção com HTTPS
+app.config['SESSION_COOKIE_SECURE'] = False  
 
 CORS(app)
 
@@ -38,7 +38,7 @@ def conectar():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="12345678",
+        password="PUC@1234",
         database="tem_ai"
     )
 
