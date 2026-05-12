@@ -27,6 +27,11 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SECURE'] = False  
 
+@app.before_request
+def renovar_sessao():
+    if session.get("id_usuario"):
+        session.modified = True
+
 CORS(app)
 
 UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
@@ -38,7 +43,7 @@ def conectar():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="PUC@1234",
+        password="12345678",
         database="tem_ai"
     )
 
