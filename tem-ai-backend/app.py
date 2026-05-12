@@ -43,7 +43,7 @@ def conectar():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="12345678",
+        password="PUC@1234",
         database="tem_ai"
     )
 
@@ -68,6 +68,17 @@ def abrir_raiz():
 
 @app.route('/pages/<pasta>/<arquivo>')
 def abrir_pagina(pasta, arquivo):
+    paginas_protegidas = [                  # adiciona aqui
+        "testar_vendas.html",
+        "estoque.html",
+        "usuario.html",
+        "painel_vendas.html",
+        "perfil.html"
+    ]
+
+    if arquivo in paginas_protegidas and not session.get("id_usuario"):
+        return redirect('/pages/home/landingpage.html')
+    
     paginas_ativas = {
         "landingpage.html": "home",
         "login.html": "login",
