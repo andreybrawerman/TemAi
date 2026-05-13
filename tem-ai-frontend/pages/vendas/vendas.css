@@ -300,6 +300,22 @@ h2 {
 .btn-finalizar:hover { background: rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.55); transform: scale(1.02); }
 .btn-finalizar:active { transform: scale(0.98); }
 
+.btn-remover-item {
+  background: none !important;
+  border: none !important;
+  font-size: 13px !important;
+  cursor: pointer;
+  margin-left: 12px;
+  padding: 0 !important;
+  width: auto !important;
+  transition: transform 0.2s ease;
+}
+
+.btn-remover-item:hover {
+  transform: scale(1.3);
+  background: none !important;
+}
+
 /* MEUS PEDIDOS */
 .meus-pedidos {
   background: linear-gradient(160deg, #d1822e, #c4722a);

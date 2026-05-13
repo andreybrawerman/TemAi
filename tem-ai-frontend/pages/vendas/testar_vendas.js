@@ -82,7 +82,7 @@ function renderizarVitrine(produtos) {
         <h3>${p.nome}</h3>
         <p class="produto-preco">R$ ${p.preco.toFixed(2)}</p>
         ${estoqueBadge}
-        <button onclick="adicionarNaSacola(${p.id}, '${p.nome}', ${p.preco}, ${p.estoque})">
+        <button id="btn-add-${p.id}" onclick="adicionarNaSacola(${p.id}, '${p.nome}', ${p.preco}, ${p.estoque})">
           + Adicionar
         </button>
       </div>
@@ -120,17 +120,15 @@ function adicionarNaSacola(id, nome, preco, estoqueDisponivel) {
     carrinho.push({ id_produto: id, nome: nome, preco: preco, quantidade: 1 });
   }
 
-  const botoes = document.querySelectorAll(`#vitrine button`);
-  botoes.forEach(btn => {
-    if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`${id},`)) {
+  const btn = document.getElementById(`btn-add-${id}`);
+  if (btn) {
       btn.textContent = "✓ Adicionado!";
       btn.classList.add("adicionado");
       setTimeout(() => {
         btn.textContent = "+ Adicionar";
         btn.classList.remove("adicionado");
       }, 1000);
-    }
-  });
+  }
 
   atualizarVisualizacaoSacola();
 }
@@ -154,6 +152,7 @@ function atualizarVisualizacaoSacola() {
             ${item.nome}
           </span>
           <span class="item-preco">R$ ${subtotal.toFixed(2)}</span>
+          <button class="btn-remover-item" onclick="removerDaSacola(${item.id_produto})" title="Remover 1 unidade">❌</button>
         </li>`;
     });
   }
@@ -187,6 +186,18 @@ function finalizarVenda() {
       listarProdutos();
       listarPedidosUsuario();
     });
+}
+
+function removerDaSacola(id) {
+  const index = carrinho.findIndex(item => item.id_produto === id);
+  if (index !== -1) {
+    if (carrinho[index].quantidade > 1) {
+      carrinho[index].quantidade -= 1;
+    } else {
+      carrinho.splice(index, 1);
+    }
+    atualizarVisualizacaoSacola();
+  }
 }
 
 // ================= PEDIDOS =================
