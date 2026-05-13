@@ -19,6 +19,10 @@
     <h1>Tem Aí? - Área de Compras</h1>
 
     <h2>Produtos Disponíveis</h2>
+    <div class="vitrine-header">
+      <input type="text" id="busca-produto" placeholder="🔍  Buscar produto..." oninput="filtrarProdutos()" />
+      <span id="contador-produtos"></span>
+    </div>
     <div id="vitrine">
       <p>Carregando produtos...</p>
     </div>
@@ -40,9 +44,6 @@
       <section class="meus-pedidos">
         <h2>Meus Pedidos</h2>
         <p>Veja o histórico de seus pedidos anteriores.</p>
-        <button onclick="listarPedidosUsuario()">
-          ATUALIZAR HISTÓRICO
-        </button>
         <div id="lista_usuario"></div>
       </section>
     </div>

@@ -670,7 +670,7 @@ def historico_geral():
 def historico_usuario(id_usuario):
     conn = conectar()
     cursor = conn.cursor()
-    sql = "SELECT ID_pedido, data_hora, status, valor_total FROM Pedido WHERE fk_Usuario_ID_usuario = %s"
+    sql = "SELECT ID_pedido, data_hora, status, valor_total FROM Pedido WHERE fk_Usuario_ID_usuario = %s ORDER BY data_hora DESC"
     cursor.execute(sql, (id_usuario,))
     pedidos = cursor.fetchall()
     lista = [{"id": p[0], "data": p[1].strftime("%d/%m/%Y %H:%M"), "status": p[2], "total": float(p[3])} for p in pedidos]

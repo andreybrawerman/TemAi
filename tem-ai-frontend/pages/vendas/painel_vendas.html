@@ -6,55 +6,95 @@
     <title>TemAí? - Painel ADM de Vendas</title>
 
     <script src="../../assets/js/auth.js"></script>
-    <script>
-      bloquearAdminAntesDeCarregar();
-    </script>
+    <script>bloquearAdminAntesDeCarregar();</script>
 
     <link rel="stylesheet" href="vendas.css" />
     <link rel="stylesheet" href="../../assets/css/globais.css" />
-
-    <link
-      rel="icon"
-      type="image/png"
-      href="../../assets/img/logo_carrinho_redondo.png"
-    />
+    <link rel="icon" type="image/png" href="../../assets/img/logo_carrinho_redondo.png" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   </head>
 
   <body>
-    
+
     {% include "includes/menu.html" %}
 
     <main>
-      <h1>Painel ADM de Vendas</h1>
-
-      <section class="painel-adm">
-        <h2>Vendas Realizadas</h2>
-
-        <button onclick="listarPedidosAdmin()">
-          ATUALIZAR RELATÓRIO GERAL
-        </button>
-
-        <div class="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>Pedido</th>
-                <th>Data</th>
-                <th>Cliente</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Ação</th>
-              </tr>
-            </thead>
-
-            <tbody id="tabela_adm">
-              <tr>
-                <td colspan="6">Carregando pedidos...</td>
-              </tr>
-            </tbody>
-          </table>
+      <div class="vp-header">
+        <div class="vp-header-title">
+          <h1>Painel ADM de Vendas</h1>
+          <p class="vp-subtitle" id="vp-datetime"></p>
         </div>
-      </section>
+        <button class="vp-refresh-btn" onclick="carregarDados()">
+          <i class="ti ti-refresh" aria-hidden="true"></i>
+          Atualizar
+        </button>
+      </div>
+
+      <div class="vp-metrics">
+        <div class="vp-metric accent">
+          <div class="vp-metric-label"><i class="ti ti-currency-dollar"></i> Total em Vendas</div>
+          <div class="vp-metric-value" id="m-total">R$ 0,00</div>
+          <div class="vp-metric-sub">todos os pedidos</div>
+        </div>
+        <div class="vp-metric">
+          <div class="vp-metric-label"><i class="ti ti-shopping-cart"></i> Pedidos</div>
+          <div class="vp-metric-value" id="m-pedidos">0</div>
+          <div class="vp-metric-sub">no total</div>
+        </div>
+        <div class="vp-metric">
+          <div class="vp-metric-label"><i class="ti ti-clock"></i> Pendentes</div>
+          <div class="vp-metric-value" id="m-pendentes">0</div>
+          <div class="vp-metric-sub">aguardando ação</div>
+        </div>
+        <div class="vp-metric">
+          <div class="vp-metric-label"><i class="ti ti-check"></i> Finalizados</div>
+          <div class="vp-metric-value" id="m-finalizados">0</div>
+          <div class="vp-metric-sub">concluídos</div>
+        </div>
+      </div>
+
+      <div class="vp-body">
+        <div class="vp-card">
+          <div class="vp-card-header">
+            <span class="vp-card-title">Vendas Realizadas</span>
+            <div class="vp-filter-row">
+              <button class="vp-filter-btn active" onclick="filtrar('todos', this)">Todos</button>
+              <button class="vp-filter-btn" onclick="filtrar('Pendente', this)">Pendentes</button>
+              <button class="vp-filter-btn" onclick="filtrar('Finalizado', this)">Finalizados</button>
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table class="vp-table">
+              <thead>
+                <tr>
+                  <th>Pedido</th>
+                  <th>Data</th>
+                  <th>Cliente</th>
+                  <th>Total</th>
+                  <th>Status</th>
+                  <th>Ação</th>
+                </tr>
+              </thead>
+              <tbody id="vp-tbody">
+                <tr><td colspan="6">Carregando pedidos...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="vp-sidebar">
+          <div class="vp-chart-card">
+            <div class="vp-chart-title">Status dos Pedidos</div>
+            <div class="vp-status-list" id="vp-status-list"></div>
+          </div>
+          <div class="vp-chart-card">
+            <div class="vp-chart-title">Últimas Vendas</div>
+            <div class="vp-recent" id="vp-recent"></div>
+          </div>
+        </div>
+      </div>
     </main>
 
     <footer>
