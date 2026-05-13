@@ -8,7 +8,7 @@
 }
 
 body {
-  background-color: #0c3d2a;
+  background-color: rgb(14, 90, 64);
   background-image:
     radial-gradient(ellipse 80% 50% at 20% 10%, rgba(209,130,51,0.08) 0%, transparent 60%),
     radial-gradient(ellipse 60% 40% at 80% 90%, rgba(14,90,64,0.6) 0%, transparent 70%);
