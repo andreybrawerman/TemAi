@@ -65,6 +65,18 @@
               <button class="vp-filter-btn" onclick="filtrar('Finalizado', this)">Finalizados</button>
             </div>
           </div>
+          <div class="vp-search-bar">
+            <span class="vp-search-icon">🔍</span>
+            <input
+              type="text"
+              id="vp-busca"
+              placeholder="Buscar por nome, CPF ou ID do pedido..."
+              oninput="buscarPedidos()"
+              autocomplete="off"
+            />
+            <span id="vp-busca-contador" class="vp-busca-contador"></span>
+            <button class="vp-busca-limpar" id="vp-busca-limpar" onclick="limparBusca()" title="Limpar busca">✕</button>
+          </div>
           <div class="table-wrapper">
             <table class="vp-table">
               <thead>

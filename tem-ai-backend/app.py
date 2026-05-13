@@ -653,15 +653,26 @@ def finalizar_venda():
 def historico_geral():
     conn = conectar()
     cursor = conn.cursor()
+    
     sql = """
-    SELECT p.ID_pedido, p.data_hora, p.status, p.valor_total, u.nome 
+    SELECT p.ID_pedido, p.data_hora, p.status, p.valor_total, u.nome, u.cpf, u.ID_usuario 
     FROM Pedido p
     JOIN Usuario u ON p.fk_Usuario_ID_usuario = u.ID_usuario
     ORDER BY p.data_hora DESC
     """
     cursor.execute(sql)
     pedidos = cursor.fetchall()
-    lista = [{"id": p[0], "data": p[1].strftime("%d/%m/%Y %H:%M"), "status": p[2], "total": float(p[3]), "cliente": p[4]} for p in pedidos]
+    
+    lista = [{
+        "id": p[0], 
+        "data": p[1].strftime("%d/%m/%Y %H:%M"), 
+        "status": p[2], 
+        "total": float(p[3]), 
+        "cliente": p[4],
+        "cpf": p[5],
+        "id_cliente": p[6]
+    } for p in pedidos]
+    
     cursor.close()
     conn.close()
     return jsonify(lista)

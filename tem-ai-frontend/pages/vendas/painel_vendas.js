@@ -118,9 +118,62 @@ function filtrar(status, btn) {
   filtroAtivo = status;
   document.querySelectorAll(".vp-filter-btn").forEach((b) => b.classList.remove("active"));
   btn.classList.add("active");
-  const filtrados =
-    status === "todos" ? todosPedidos : todosPedidos.filter((p) => p.status === status);
-  renderTabela(filtrados);
+  aplicarFiltros();
+}
+
+function aplicarFiltros() {
+  const termo = (document.getElementById("vp-busca")?.value || "").toLowerCase().trim();
+  const semAcento = str => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+  let resultado = filtroAtivo === "todos"
+    ? todosPedidos
+    : todosPedidos.filter(p => p.status === filtroAtivo);
+
+  if (termo) {
+    if (termo.startsWith("#")) {
+      const numeroBuscado = termo.replace("#", "").trim();
+      resultado = resultado.filter(p => String(p.id).includes(numeroBuscado));
+    } 
+    else {
+      resultado = resultado.filter(p => {
+        const nome     = semAcento((p.cliente || "").toLowerCase());
+        
+        const cpf      = (p.cpf || "").replace(/\D/g, ""); 
+        const termoNumerico = termo.replace(/\D/g, ""); 
+
+        const idCliente = String(p.id_cliente || "");
+        const idPedido  = String(p.id || "");
+        const termoSem = semAcento(termo);
+
+        return nome.includes(termoSem) || 
+               (cpf.includes(termoNumerico) && termoNumerico !== "") || 
+               idCliente.includes(termoSem) || 
+               idPedido.includes(termoSem);
+      });
+    }
+  }
+
+  const contador = document.getElementById("vp-busca-contador");
+  const limpar   = document.getElementById("vp-busca-limpar");
+  if (contador) {
+    contador.textContent = termo
+      ? `${resultado.length} resultado${resultado.length === 1 ? "" : "s"}`
+      : "";
+  }
+  if (limpar) limpar.style.display = termo ? "flex" : "none";
+
+  renderTabela(resultado);
+}
+
+function buscarPedidos() {
+  aplicarFiltros();
+}
+
+function limparBusca() {
+  const input = document.getElementById("vp-busca");
+  if (input) input.value = "";
+  aplicarFiltros();
+  input?.focus();
 }
 
 function carregarDados() {
@@ -130,9 +183,7 @@ function carregarDados() {
       todosPedidos = pedidos;
       atualizarRelogio();
       renderMetricas(pedidos);
-      const filtrados =
-        filtroAtivo === "todos" ? pedidos : pedidos.filter((p) => p.status === filtroAtivo);
-      renderTabela(filtrados);
+      aplicarFiltros();
     })
     .catch(() => {
       alert("Erro ao carregar relatório geral de vendas.");
