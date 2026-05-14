@@ -3,16 +3,20 @@ CREATE DATABASE tem_ai;
 USE tem_ai;
 
 CREATE TABLE Usuario (
-    ID_usuario INT PRIMARY KEY AUTO_INCREMENT,
+    ID_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
     senha VARCHAR(255) NOT NULL,
-    data_nascimento DATE,
-    cpf VARCHAR(14),
+    data_nascimento DATE NOT NULL,
+    cpf VARCHAR(14) NOT NULL,
+    foto_perfil VARCHAR(255),
     cep VARCHAR(8),
     logradouro VARCHAR(150),
+    numero VARCHAR(20),
+    complemento VARCHAR(100),
     cidade VARCHAR(50),
-    estado CHAR(2)
+    estado CHAR(2),
+    tipo VARCHAR(20) DEFAULT 'cliente'
 );
 
 CREATE TABLE Produto (
