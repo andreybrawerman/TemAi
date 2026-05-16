@@ -86,7 +86,12 @@ document
         confirmButtonText: 'OK'
         });
         } else {
-          alert(resultado.erro || "Erro ao salvar o produto.");
+          Swal.fire({
+            title: "Erro",
+            text: resultado.erro || "Erro ao salvar o produto.",
+            icon: "error",
+            confirmButtonText: "OK"
+          });
         }
       }
     } catch (erro) {
