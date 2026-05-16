@@ -186,7 +186,12 @@ function carregarDados() {
       aplicarFiltros();
     })
     .catch(() => {
-      alert("Erro ao carregar relatório geral de vendas.");
+      Swal.fire({
+        title: "Erro",
+        text: "Erro ao carregar relatório geral de vendas.",
+        icon: "error",
+        confirmButtonText: "OK"
+      });
     });
 }
 
@@ -198,11 +203,22 @@ function finalizarPedido(id) {
   })
     .then((r) => r.json())
     .then((data) => {
-      alert(data.mensagem || data.erro);
+      Swal.fire({
+        title: data.erro ? "Erro" : "Sucesso",
+        text: data.mensagem || data.erro,
+        icon: data.erro ? "error" : "success",
+        confirmButtonText: "OK"
+      });
+
       carregarDados();
     })
     .catch(() => {
-      alert("Erro ao atualizar status do pedido.");
+      Swal.fire({
+        title: "Erro",
+        text: "Erro ao atualizar status do pedido.",
+        icon: "error",
+        confirmButtonText: "OK"
+      });
     });
 }
 

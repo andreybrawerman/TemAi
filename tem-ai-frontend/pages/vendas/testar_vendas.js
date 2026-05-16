@@ -112,9 +112,14 @@ function adicionarNaSacola(id, nome, preco, estoqueDisponivel) {
 
   if (itemExistente) {
     if (itemExistente.quantidade >= estoqueDisponivel) {
-      alert(`Quantidade máxima disponível: ${estoqueDisponivel}`);
-      return;
-    }
+  Swal.fire({
+    title: "Limite de estoque",
+    text: `Quantidade máxima disponível: ${estoqueDisponivel}`,
+    icon: "warning",
+    confirmButtonText: "OK"
+  });
+  return;
+  }
     itemExistente.quantidade += 1;
   } else {
     carrinho.push({ id_produto: id, nome: nome, preco: preco, quantidade: 1 });
@@ -160,7 +165,13 @@ function atualizarVisualizacaoSacola() {
 }
 
 function finalizarVenda() {
-  if (carrinho.length === 0) return alert("Sua sacola está vazia!");
+  if (carrinho.length === 0)
+    return Swal.fire({
+      title: "Sacola vazia",
+      text: "Sua sacola está vazia!",
+      icon: "warning",
+      confirmButtonText: "OK"
+    });
 
   const dadosPedido = {
     id_usuario: idUsuarioLogado,
@@ -178,8 +189,22 @@ function finalizarVenda() {
   })
     .then((res) => res.json())
     .then((data) => {
-      if (data.mensagem) alert(data.mensagem);
-      else if (data.erro) alert("Erro: " + data.erro);
+      if (data.mensagem) {
+        Swal.fire({
+          title: "Pedido realizado!",
+          text: data.mensagem,
+          icon: "success",
+          confirmButtonText: "OK"
+        });
+      }
+      else if (data.erro) {
+        Swal.fire({
+          title: "Erro",
+          text: data.erro,
+          icon: "error",
+          confirmButtonText: "OK"
+        });
+      }
 
       carrinho = [];
       atualizarVisualizacaoSacola();
