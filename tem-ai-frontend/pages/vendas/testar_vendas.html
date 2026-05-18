@@ -18,34 +18,54 @@
 
     <h1>Tem Aí? - Área de Compras</h1>
 
-    <h2>Produtos Disponíveis</h2>
-    <div class="vitrine-header">
-      <input type="text" id="busca-produto" placeholder="🔍  Buscar produto..." oninput="filtrarProdutos()" />
-      <span id="contador-produtos"></span>
-    </div>
-    <div id="vitrine">
-      <p>Carregando produtos...</p>
-    </div>
+    <div class="compras-layout">
+      <section class="area-produtos">
+        <h2>Produtos Disponíveis</h2>
 
-    <div class="container">
-      <section class="sacola-area">
-        <h2>🛒 Minha Sacola</h2>
-        <ul id="itens_sacola">
-          <li>Nenhum item adicionado.</li>
-        </ul>
-        <p id="total">
-          <strong>TOTAL: R$ <span id="valor_total_sacola">0.00</span></strong>
-        </p>
-        <button class="btn-finalizar" onclick="finalizarVenda()">
-          FINALIZAR COMPRA
-        </button>
+        <div class="vitrine-header">
+          <input
+            type="text"
+            id="busca-produto"
+            placeholder="🔍  Buscar produto..."
+            oninput="filtrarProdutos()"
+          />
+          <span id="contador-produtos"></span>
+        </div>
+
+        <div id="vitrine">
+          <p>Carregando produtos...</p>
+        </div>
       </section>
 
-      <section class="meus-pedidos">
-        <h2>Meus Pedidos</h2>
-        <p>Veja o histórico de seus pedidos anteriores.</p>
-        <div id="lista_usuario"></div>
-      </section>
+      <button class="btn-abrir-sacola" onclick="alternarSacolaMobile()">
+        Carrinho
+      </button>
+
+      <div class="overlay-sacola" onclick="fecharSacolaMobile()"></div>
+
+      <aside class="compras-lateral">
+        <section class="sacola-area">
+          <h2>Meu Carrinho</h2>
+
+          <ul id="itens_sacola">
+            <li>Nenhum item adicionado.</li>
+          </ul>
+
+          <p id="total">
+            <strong>TOTAL: R$ <span id="valor_total_sacola">0.00</span></strong>
+          </p>
+
+          <button class="btn-finalizar" onclick="finalizarVenda()">
+            FINALIZAR COMPRA
+          </button>
+        </section>
+
+        <section class="meus-pedidos">
+          <h2>Meus Pedidos</h2>
+          <p>Veja o histórico de seus pedidos anteriores.</p>
+          <div id="lista_usuario"></div>
+        </section>
+      </aside>
     </div>
 
     <footer>Copyright © 2026 TemAí? Inc. Todos os direitos reservados.</footer>

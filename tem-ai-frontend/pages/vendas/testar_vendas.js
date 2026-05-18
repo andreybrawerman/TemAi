@@ -69,12 +69,14 @@ function renderizarVitrine(produtos) {
   }
 
   if (contador) {
-    contador.textContent = `${produtos.length} produto${produtos.length === 1 ? '' : 's'}`;
+    contador.textContent = `${produtos.length} produto${produtos.length === 1 ? "" : "s"}`;
   }
 
   produtos.forEach((p) => {
     const emoji = getEmoji(p.nome);
     const estoqueBadge = getEstoqueBadge(p.estoque);
+    const itemCarrinho = carrinho.find(item => item.id_produto === p.id);
+    const qtd = itemCarrinho ? itemCarrinho.quantidade : 0;
 
     vitrine.innerHTML += `
       <div class="produto-card">
@@ -82,9 +84,12 @@ function renderizarVitrine(produtos) {
         <h3>${p.nome}</h3>
         <p class="produto-preco">R$ ${p.preco.toFixed(2)}</p>
         ${estoqueBadge}
-        <button id="btn-add-${p.id}" onclick="adicionarNaSacola(${p.id}, '${p.nome}', ${p.preco}, ${p.estoque})">
-          + Adicionar
-        </button>
+
+        <div class="produto-controles">
+          <button class="btn-qty" onclick="diminuirProduto(${p.id})">−</button>
+          <span id="qtd-produto-${p.id}" class="qtd-produto">${qtd}</span>
+          <button class="btn-qty" onclick="adicionarNaSacola(${p.id})">+</button>
+        </div>
       </div>
     `;
   });
@@ -107,40 +112,43 @@ function filtrarProdutos() {
   renderizarVitrine(filtrados);
 }
 
-function adicionarNaSacola(id, nome, preco, estoqueDisponivel) {
+function adicionarNaSacola(id) {
+  const produto = todosProdutos.find(p => p.id === id);
+
+  if (!produto) return;
+
   const itemExistente = carrinho.find(item => item.id_produto === id);
 
   if (itemExistente) {
-    if (itemExistente.quantidade >= estoqueDisponivel) {
-  Swal.fire({
-    title: "Limite de estoque",
-    text: `Quantidade máxima disponível: ${estoqueDisponivel}`,
-    icon: "warning",
-    confirmButtonText: "OK"
-  });
-  return;
-  }
+    if (itemExistente.quantidade >= produto.estoque) {
+      Swal.fire({
+        title: "Limite de estoque",
+        text: `Quantidade máxima disponível: ${produto.estoque}`,
+        icon: "warning",
+        confirmButtonText: "OK"
+      });
+      return;
+    }
+
     itemExistente.quantidade += 1;
   } else {
-    carrinho.push({ id_produto: id, nome: nome, preco: preco, quantidade: 1 });
-  }
-
-  const btn = document.getElementById(`btn-add-${id}`);
-  if (btn) {
-      btn.textContent = "✓ Adicionado!";
-      btn.classList.add("adicionado");
-      setTimeout(() => {
-        btn.textContent = "+ Adicionar";
-        btn.classList.remove("adicionado");
-      }, 1000);
+    carrinho.push({
+      id_produto: produto.id,
+      nome: produto.nome,
+      preco: produto.preco,
+      estoque: produto.estoque,
+      quantidade: 1
+    });
   }
 
   atualizarVisualizacaoSacola();
+  atualizarQuantidadeCard(id);
 }
 
 function atualizarVisualizacaoSacola() {
   const lista = document.getElementById("itens_sacola");
   const totalTxt = document.getElementById("valor_total_sacola");
+
   lista.innerHTML = "";
   totalGeral = 0;
 
@@ -150,17 +158,27 @@ function atualizarVisualizacaoSacola() {
     carrinho.forEach((item) => {
       const subtotal = item.preco * item.quantidade;
       totalGeral += subtotal;
+
       lista.innerHTML += `
-        <li>
-          <span class="item-info">
-            <span class="item-qty">${item.quantidade}x</span>
-            ${item.nome}
-          </span>
-          <span class="item-preco">R$ ${subtotal.toFixed(2)}</span>
-          <button class="btn-remover-item" onclick="removerDaSacola(${item.id_produto})" title="Remover 1 unidade">❌</button>
-        </li>`;
+        <li class="sacola-item">
+          <div class="item-info">
+            <strong>${item.nome}</strong>
+            <span class="item-preco">R$ ${subtotal.toFixed(2)}</span>
+          </div>
+
+          <div class="sacola-controles">
+            <button class="btn-sacola-qty" onclick="diminuirProduto(${item.id_produto})">−</button>
+            <span class="item-qty">${item.quantidade}</span>
+            <button class="btn-sacola-qty" onclick="adicionarNaSacola(${item.id_produto})">+</button>
+            <button class="btn-lixeira" onclick="removerProdutoSacola(${item.id_produto})" title="Remover item">
+              🗑️
+            </button>
+          </div>
+        </li>
+      `;
     });
   }
+
   totalTxt.innerText = totalGeral.toFixed(2);
 }
 
@@ -213,16 +231,26 @@ function finalizarVenda() {
     });
 }
 
-function removerDaSacola(id) {
+function diminuirProduto(id) {
   const index = carrinho.findIndex(item => item.id_produto === id);
+
   if (index !== -1) {
     if (carrinho[index].quantidade > 1) {
       carrinho[index].quantidade -= 1;
     } else {
       carrinho.splice(index, 1);
     }
+
     atualizarVisualizacaoSacola();
+    atualizarQuantidadeCard(id);
   }
+}
+
+function removerProdutoSacola(id) {
+  carrinho = carrinho.filter(item => item.id_produto !== id);
+
+  atualizarVisualizacaoSacola();
+  atualizarQuantidadeCard(id);
 }
 
 // ================= PEDIDOS =================
@@ -261,7 +289,7 @@ function desenharPedidosNaTela() {
     return `
       <div class="pedido-card">
         <div class="pedido-header">
-          <strong>📦 Pedido #${p.id}</strong>
+          <strong>Pedido #${p.id}</strong>
           <span>${p.data}</span>
         </div>
         <div class="pedido-footer">
@@ -284,6 +312,30 @@ function desenharPedidosNaTela() {
 function alternarPedidos() {
   mostrarTodosPedidos = !mostrarTodosPedidos;
   desenharPedidosNaTela();
+}
+
+function atualizarQuantidadeCard(id) {
+  const qtdSpan = document.getElementById(`qtd-produto-${id}`);
+  if (!qtdSpan) return;
+
+  const item = carrinho.find(item => item.id_produto === id);
+  qtdSpan.textContent = item ? item.quantidade : 0;
+}
+
+function alternarSacolaMobile() {
+  const lateral = document.querySelector(".compras-lateral");
+  const overlay = document.querySelector(".overlay-sacola");
+
+  lateral.classList.toggle("aberta");
+  overlay.classList.toggle("ativo");
+}
+
+function fecharSacolaMobile() {
+  const lateral = document.querySelector(".compras-lateral");
+  const overlay = document.querySelector(".overlay-sacola");
+
+  lateral.classList.remove("aberta");
+  overlay.classList.remove("ativo");
 }
 
 verificarLogin();
