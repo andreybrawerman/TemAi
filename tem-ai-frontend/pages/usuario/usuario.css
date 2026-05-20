@@ -281,85 +281,74 @@ input[readonly] {
 /* RESPONSIVIDADE */
 /* ========================= */
 
-/* TABLET */
+/* NOTEBOOKS E TABLETS */
 @media (max-width: 950px) {
     .container {
         padding: 30px 4%;
     }
-
     h1 {
         font-size: 52px;
     }
-
     .card-header {
         flex-direction: column;
         align-items: stretch;
     }
-
     .card-header .btn-principal {
         width: 100%;
     }
-
     .form-grid {
         grid-template-columns: repeat(2, minmax(200px, 1fr));
     }
-
     .linha-usuario {
-        grid-template-columns: 60px minmax(160px, 1fr) minmax(280px, 1.6fr) 240px;
-        min-width: 820px;
+        grid-template-columns: 50px minmax(130px, 1fr) minmax(220px, 1.5fr) 230px;
+        min-width: 680px; 
+    }
+    .tabela-usuarios {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 }
 
-/* CELULAR */
-@media (max-width: 600px) {
+/* TABLETS PADRÃO E CELULARES (Até 768px) */
+@media (max-width: 768px) {
     .container {
         padding: 25px 4%;
     }
-
     h1 {
         font-size: 42px;
         margin-bottom: 25px;
     }
-
     h2 {
         font-size: 30px;
     }
-
     .card {
         padding: 22px;
         border-radius: 16px;
     }
-
     .card:hover {
         transform: none;
     }
-
     .form-grid {
         grid-template-columns: 1fr;
     }
-
     .full-width {
         grid-column: auto;
     }
-
     .btn-principal {
         width: 100%;
         font-size: 17px;
     }
-
+    
     .tabela-usuarios {
-        overflow-x: visible;
+        overflow-x: hidden;
     }
-
     .cabecalho-lista {
         display: none;
     }
-
     .lista-estilizada {
         max-height: 620px;
         overflow-y: auto;
     }
-
     .linha-usuario {
         display: flex;
         flex-direction: column;
@@ -367,85 +356,28 @@ input[readonly] {
         min-width: 0;
         width: 100%;
         gap: 8px;
+        padding: 16px;
     }
-
     .usuario-id::before {
         content: "ID: ";
         color: var(--branco);
     }
-
     .usuario-nome::before {
         content: "Nome: ";
         color: var(--laranja);
     }
-
     .usuario-email::before {
         content: "Email: ";
         color: var(--laranja);
         font-weight: bold;
     }
-
     .usuario-email {
         width: 100%;
         font-size: 14px;
     }
-
     .usuario-acoes {
         width: 100%;
         display: grid;
         grid-template-columns: 1fr;
-        gap: 8px;
-        margin-top: 8px;
     }
-
-    .btn-acao {
-        width: 100%;
-        padding: 10px;
-    }
-}
-
-/* CELULAR BEM PEQUENO */
-@media (max-width: 380px) {
-    h1 {
-        font-size: 36px;
-    }
-
-    .card {
-        padding: 18px;
-    }
-
-    input {
-        font-size: 13px;
-    }
-}
-
-.barra-pesquisa {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.barra-pesquisa label {
-    font-weight: bold;
-    color: var(--branco);
-    font-size: 14px;
-}
-
-.barra-pesquisa input {
-    width: 100%;
-    padding: 13px;
-    border-radius: 8px;
-    border: none;
-    background: #f4f4f4;
-    color: #333;
-    font-size: 14px;
-}
-
-.linha-vazia {
-    background: rgba(255,255,255,0.1);
-    padding: 18px;
-    border-radius: 10px;
-    text-align: center;
-    color: rgba(255,255,255,0.8);
 }
